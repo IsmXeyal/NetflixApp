@@ -9,6 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="StaticFiles\Images\avatar.jpg" />
+    <None Remove="StaticFiles\Images\bg.png" />
+    <None Remove="StaticFiles\Images\cinema.jpg" />
+    <None Remove="StaticFiles\Images\down.png" />
+    <None Remove="StaticFiles\Images\fon.jpg" />
+    <None Remove="StaticFiles\Images\n3.jpg" />
+    <None Remove="StaticFiles\Images\netf.jpg" />
+    <None Remove="StaticFiles\Images\netfl.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EO.WebBrowser.Wpf" Version="24.0.20" />
     <PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.26">
@@ -21,6 +32,40 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NetflixAppBusinessLogicLayer\NetflixAppBusinessLogicLayer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Command\" />
+    <Folder Include="DTOs\" />
+    <Folder Include="Services\Validations\" />
+    <Folder Include="ViewModels\PageViewModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="StaticFiles\Images\avatar.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StaticFiles\Images\bg.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StaticFiles\Images\cinema.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StaticFiles\Images\down.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StaticFiles\Images\fon.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StaticFiles\Images\n3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StaticFiles\Images\netf.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StaticFiles\Images\netfl.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

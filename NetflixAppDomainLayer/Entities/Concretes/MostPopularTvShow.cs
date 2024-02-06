@@ -1,5 +1,11 @@
-﻿namespace NetflixAppDomainLayer.Entities.Concretes;
+﻿using NetflixAppDomainLayer.Entities.Abstracts;
 
-public class MostPopularTvShow
+namespace NetflixAppDomainLayer.Entities.Concretes;
+
+public class MostPopularTvShow : BaseMovieTVEntity
 {
+    // Navigation Property
+    public virtual ICollection<Genre>? Genres { get; set; }
+    public virtual ICollection<AddListMpT>? AddListMpTs { get; set; }
+    public virtual ICollection<Language>? Languages { get; set; }
 }

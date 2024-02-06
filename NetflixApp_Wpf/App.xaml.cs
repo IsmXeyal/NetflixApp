@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using NetflixApp_Wpf.ViewModels.WindowViewModels;
+using NetflixApp_Wpf.Views.Windows;
+using System.Windows;
 
 namespace NetflixApp_Wpf;
 

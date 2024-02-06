@@ -1,0 +1,71 @@
+﻿<Page x:Class="NetflixApp_Wpf.Views.Pages.IntroScreenPageView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NetflixApp_Wpf.Views.Pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="550" d:DesignWidth="850" 
+      Width="850" Height="550" Title="IntroScreenPageView">
+
+    <Page.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="2" Duration="0:0:3"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Page.Triggers>
+
+    <Grid>
+        <Grid.Background>
+            <SolidColorBrush Color="Black"/>
+        </Grid.Background>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="5.5*"/>
+                <RowDefinition Height="0.5*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Foreground="Red" Text="N E T F L I X" TextAlignment="Center" VerticalAlignment="Center" 
+                FontSize="40" FontWeight="DemiBold" FontFamily="Trebuchet MS" >
+                <TextBlock.Effect>
+                    <DropShadowEffect BlurRadius="40"
+                        ShadowDepth="2"
+                        Direction="-90"
+                        Color="#FFFF4040" />
+
+                </TextBlock.Effect>
+            </TextBlock>
+
+            <Grid Grid.Row="1">
+                <Image Source="..\..\StaticFiles\Images\cinema.jpg" Stretch="Fill" />
+            </Grid>
+
+            <!-- Style: This approach is often used when you want to start with the default 
+            appearance of a control and possibly apply a specific style dynamically later. -->
+            <Grid Grid.Row="2">
+                <ProgressBar 
+                    x:Name="pbInput" 
+                    Style="{x:Null}" 
+                    Minimum="0" 
+                    Maximum="100" 
+                    VerticalAlignment="Bottom" 
+                    Height="10" 
+                    Background="White" 
+                    Value="0" 
+                    Foreground="Red"
+            >
+                    <ProgressBar.Effect>
+                        <DropShadowEffect BlurRadius="20"
+                          ShadowDepth="2"
+                          Direction="-40"
+                          Color="White" />
+                    </ProgressBar.Effect>
+                </ProgressBar>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

@@ -1,5 +1,11 @@
-﻿namespace NetflixAppDomainLayer.Entities.Concretes;
+﻿using NetflixAppDomainLayer.Entities.Abstracts;
 
-public class Top250Movie
+namespace NetflixAppDomainLayer.Entities.Concretes;
+
+public class Top250Movie : BaseMovieTVEntity
 {
+    // Navigation Property
+    public virtual ICollection<Genre>? Genres { get; set; }
+    public virtual ICollection<AddListTM>? AddListTMs { get; set; }
+    public virtual ICollection<Language>? Languages { get; set; }
 }

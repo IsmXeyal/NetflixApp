@@ -1,5 +1,14 @@
-﻿namespace NetflixAppDomainLayer.Entities.Concretes;
+﻿using NetflixAppDomainLayer.Entities.Abstracts;
 
-public class EditorChoice
+namespace NetflixAppDomainLayer.Entities.Concretes;
+
+public class EditorChoice : BaseMovieEntity
 {
+    public int Rank {  get; set; }
+    public string? Video_link { get; set; }
+
+    // Navigation Property
+    public virtual ICollection<Genre>? Genres { get; set; }
+    public virtual ICollection<AddListEC>? AddListECs { get; set; }
+    public virtual ICollection<Language>? Languages { get; set; }
 }
