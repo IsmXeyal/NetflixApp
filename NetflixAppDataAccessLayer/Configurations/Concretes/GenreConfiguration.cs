@@ -1,14 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using NetflixAppDataAccessLayer.Configurations.Abstracts;
 using NetflixAppDomainLayer.Entities.Concretes;
 
 namespace NetflixAppDataAccessLayer.Configurations.Concretes;
 
-internal class GenreConfiguration : BaseServiceEntityConfiguration, IEntityTypeConfiguration<Genre>
+internal class GenreConfiguration : IEntityTypeConfiguration<Genre>
 {
     public void Configure(EntityTypeBuilder<Genre> builder)
     {
-        // No additional configurations needed for Genre entity
+        builder.HasKey(e => e.Id);
+        builder.Property(e => e.Id).IsRequired().UseIdentityColumn();
+        builder.HasIndex(x => x.Name).IsUnique();
+        builder.Property(x => x.Name).IsRequired();
     }
 }

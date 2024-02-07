@@ -10,5 +10,5 @@ public class AddListTM : BaseAddListEntity
 
     // Navigation Property
     public virtual Person? Person { get; set; }
-    public virtual Top250Movie? Top250Movies { get; set; }
+    public virtual Top250Movie? Top250Movie { get; set; }
 }
