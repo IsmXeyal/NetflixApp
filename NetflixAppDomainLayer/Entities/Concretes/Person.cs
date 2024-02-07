@@ -19,8 +19,8 @@ public class Person : BaseEntity
 
     // Navigation Property
     public virtual ICollection<AddListEC>? AddListECs { get; set; }
-    public virtual ICollection<MostPopularMovie>? MostPopularMovies { get; set; }
-    public virtual ICollection<MostPopularTvShow>? MostPopularTvShows { get; set; }
-    public virtual ICollection<Top250Movie>? Top250Movies { get; set; }
-    public virtual ICollection<Top250TvShow>? Top250TvShows { get; set; }
+    public virtual ICollection<AddListMPM>? AddListMPMs { get; set; }
+    public virtual ICollection<AddListMpT>? AddListMpTs { get; set; }
+    public virtual ICollection<AddListTM>? AddListTMs { get; set; }
+    public virtual ICollection<AddListTT>? AddListTTs { get; set; }
 }

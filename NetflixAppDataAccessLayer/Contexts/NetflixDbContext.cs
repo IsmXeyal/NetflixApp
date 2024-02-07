@@ -39,4 +39,5 @@ public class NetflixDbContext : DbContext
     public virtual DbSet<AddListMpT> AddListMpTs { get; set; }
     public virtual DbSet<AddListTM> AddListTMs { get; set; }
     public virtual DbSet<AddListTT> AddListTTs { get; set; }
+    public virtual DbSet<Comment> Comments { get; set; }
 }

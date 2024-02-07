@@ -8,4 +8,5 @@ public class Top250Movie : BaseMovieTVEntity
     public virtual ICollection<Genre>? Genres { get; set; }
     public virtual ICollection<AddListTM>? AddListTMs { get; set; }
     public virtual ICollection<Language>? Languages { get; set; }
+    public virtual ICollection<Comment>? Comments { get; set; }
 }

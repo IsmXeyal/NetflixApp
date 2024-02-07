@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Configurations\" />
     <Folder Include="Repositories\Abstracts\" />
     <Folder Include="Repositories\Concretes\" />
   </ItemGroup>
