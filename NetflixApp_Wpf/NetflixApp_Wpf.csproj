@@ -35,13 +35,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Command\" />
-    <Folder Include="DTOs\" />
-    <Folder Include="Services\Validations\" />
-    <Folder Include="ViewModels\PageViewModels\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Resource Include="StaticFiles\Images\avatar.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

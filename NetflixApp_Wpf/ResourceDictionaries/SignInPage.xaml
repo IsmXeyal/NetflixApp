@@ -9,8 +9,8 @@
                         <ThicknessAnimation>
                             <ThicknessAnimation.From>
                                 <Thickness 
-                                    Left="-800"
-                                    Top="-550"
+                                    Left="-40"
+                                    Top="-22"
                                     Right="0"
                                     Bottom="0"/>
                             </ThicknessAnimation.From>

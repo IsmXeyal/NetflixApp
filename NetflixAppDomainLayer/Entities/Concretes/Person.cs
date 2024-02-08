@@ -12,11 +12,6 @@ public class Person : BaseEntity
     public string? Image { get; set; }
     public string? PhoneNumber { get; set; }
 
-    public Person()
-    {
-        Image = null;
-    }
-
     // Navigation Property
     public virtual ICollection<AddListEC>? AddListECs { get; set; }
     public virtual ICollection<AddListMPM>? AddListMPMs { get; set; }

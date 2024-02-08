@@ -21,7 +21,7 @@ public partial class IntroScreenPageView : Page
                 if (pbInput.Value >= 100)
                 {
                     timer.Stop();
-                    //NavigationService?.Navigate(new SignInPageView());
+                    NavigationService?.Navigate(new SignInPageView());
                 }
                 else if (pbInput.Value < 30)
                     pbInput.Value += 1;

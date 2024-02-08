@@ -1,0 +1,417 @@
+﻿<Page x:Class="NetflixApp_Wpf.Views.Pages.SignUpPageView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NetflixApp_Wpf.Views.Pages"
+      xmlns:services="clr-namespace:NetflixApp_Wpf.Services.Validations"
+      xmlns:models_="clr-namespace:NetflixApp_Wpf.DTOs"
+      mc:Ignorable="d" 
+      d:DesignHeight="550" d:DesignWidth="850" Width="850" Height="550"
+      Title="SignUpPageView" Style="{StaticResource ResourceKey= SignUpPageR}">
+
+    <!-- is creating an object of the Person class and naming it "person" so that it can be used elsewhere in the XAML file, 
+    often for data binding or referencing in the user interface. -->
+
+    <!-- When validation errors occur, the AdornedElementPlaceholder is used to position visual error indicators, and 
+    the TextBlock displays the corresponding error message. -->
+
+    <Page.Resources>
+        <models_:PersonDTO x:Key="person" />
+        <ControlTemplate x:Key="validationTemplate">
+            <DockPanel>
+                <TextBlock Foreground="OrangeRed" FontSize="10" HorizontalAlignment="Right" Text="{Binding [0].ErrorContent}" DockPanel.Dock="Bottom"/>
+                <AdornedElementPlaceholder/>
+            </DockPanel>
+        </ControlTemplate>
+    </Page.Resources>
+
+    <!-- Summary: ErrorContent (Inside of ValidationResult)  
+    Gets an object that provides additional information about the invalidity.
+    Returns:
+    An object that provides additional information about the invalidity. -->
+
+    <Grid>
+        <Border CornerRadius="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="1.8*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0">
+                    <Border CornerRadius="10 0 0 10">
+                        <Border.Background>
+                            <ImageBrush ImageSource="..\..\StaticFiles\Images\n3.jpg"/>
+                        </Border.Background>
+                    </Border>
+
+                    <Canvas>
+                        <Button x:Name="btnBack" ToolTip="Back" 
+                        Command="{Binding BackCommand}"                    
+                        Background="Transparent" Padding="auto" Canvas.Left="2" Canvas.Top="2" 
+                        BorderThickness="0" Height="26" Width="30">
+                            <materialDesign:PackIcon Name="icnBack" BorderThickness="0" Kind="ArrowLeft" Foreground="White" Height="26" Width="30"/>
+                            <Button.Triggers>
+                                <EventTrigger RoutedEvent="MouseEnter">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="Width"
+                                                To="34"
+                                                Duration="0:0:0.3"/>
+                                            <DoubleAnimation
+                                            Storyboard.TargetProperty="Height"
+                                            To="32"
+                                            Duration="0:0:0.3"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+
+                                <EventTrigger RoutedEvent="MouseLeave">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation 
+                                                Storyboard.TargetProperty="Width"
+                                                To="30"
+                                                Duration="0:0:0.5"/>
+                                            <DoubleAnimation 
+                                                Storyboard.TargetProperty="Height"
+                                                To="26"
+                                                Duration="0:0:0.5"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Button.Triggers>
+                        </Button>
+                    </Canvas>
+
+                    <Grid VerticalAlignment="Center" Width="250" Height="330">
+                        <Rectangle Width="250" Fill="Black" Opacity="0.8"/>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                            <TextBlock 
+                                Text="Welcome Back!"
+                                Foreground="White"
+                                FontSize="26"
+                                FontFamily="Netflix Sans"
+                                FontWeight="Bold"
+                                HorizontalAlignment="Center"/>
+                            <TextBlock 
+                                Text="Please enter your personal information and then log in to your account.."
+                                TextWrapping="Wrap"
+                                TextAlignment="Center"
+                                Margin="38 20 38 0"
+                                Foreground="White"
+                                FontSize="16"
+                                FontWeight="Normal"
+                                FontFamily="Netflix Sans"
+                                HorizontalAlignment="Center"/>
+                            <Button
+                                Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                                Margin="0 30 0 0"
+                                Width="230"
+                                Height="40"
+                                FontFamily="Netflix Sans"
+                                FontSize="17"
+                                FontWeight="Bold"
+                                Background="Red"
+                                BorderThickness="0"
+                                Command="{Binding SignInBackCommand}"
+                                materialDesign:ButtonAssist.CornerRadius="5">
+                                <TextBlock Text="Sign In"/>
+                                <Button.Triggers>
+                                    <EventTrigger RoutedEvent="MouseEnter">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation 
+                                                    Storyboard.TargetProperty="Width"
+                                                    To="200"
+                                                    Duration="0:0:0.3"/>
+
+                                                <DoubleAnimation 
+                                                    Storyboard.TargetProperty="Height"
+                                                    To="35"
+                                                    Duration="0:0:0.3"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                    <EventTrigger RoutedEvent="MouseLeave">
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation 
+                                                    Storyboard.TargetProperty="Width"
+                                                    To="230"
+                                                    Duration="0:0:0.3"/>
+
+                                                <DoubleAnimation 
+                                                    Storyboard.TargetProperty="Height"
+                                                    To="40"
+                                                    Duration="0:0:0.3"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </EventTrigger>
+                                </Button.Triggers>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+
+                <Grid Grid.Column="1">
+                    <Border CornerRadius="0 10 10 0" Background="White">
+                        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <StackPanel>
+                                <TextBlock 
+                                    Margin="0 10 0 0"
+                                    Text="Create Account"
+                                    FontSize="32"
+                                    FontFamily="Netflix Sans"
+                                    FontWeight="Bold"
+                                    Foreground="Red"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Center"/>
+                                <TextBlock Text="Watch anywhere. Cancel anytime. Ready to watch? Enter your datas to create or restart your membership."
+                                   Width="210" Height="60" Margin="50 20 40 0"
+                                   FontFamily="Netflix Sans"
+                                   FontSize="12"
+                                   FontWeight="DemiBold"
+                                   Foreground="#FF403E3E"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBox x:Name="tbFirstname"
+                                    Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                    Margin="0 20 60 0"
+                                    Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                    Width="200"
+                                    Height="50"
+                                    BorderBrush="#FF1773DA"
+                                    FontSize="14"
+                                    materialDesign:TextFieldAssist.HasClearButton="True"
+                                    materialDesign:TextFieldAssist.UnderlineBrush="#FF1773DA"
+                                    CaretBrush="#FF1773DA">
+                                        <materialDesign:HintAssist.Hint>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Account" VerticalAlignment="Center" Height="25" Width="20" Foreground="#FF1773DA"/>
+                                                <TextBlock Text="Firstname" Padding="10 0 0 0" VerticalAlignment="Center" Foreground="#FF1773DA"/>
+                                            </StackPanel>
+                                        </materialDesign:HintAssist.Hint>
+                                        <TextBox.Text>
+                                            <Binding Path="Firstname" Source="{StaticResource person}" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <services:NameValidationRuleService/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+
+                                    <TextBox x:Name="tbLastname"
+                                        Margin="0 20 0 0"
+                                        Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        Width="200"
+                                        Height="50"
+                                        BorderBrush="#FF1773DA"
+                                        FontSize="14"
+                                        HorizontalAlignment="Left"
+                                        materialDesign:TextFieldAssist.HasClearButton="True"
+                                        CaretBrush="#FF1773DA"
+                                        materialDesign:TextFieldAssist.UnderlineBrush="#FF1773DA">
+                                        <materialDesign:HintAssist.Hint>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Account" VerticalAlignment="Center" Height="25" Width="20" Foreground="#FF1773DA"/>
+                                                <TextBlock Text="Lastname" Padding="10 0 0 0" VerticalAlignment="Center" Foreground="#FF1773DA"/>
+                                            </StackPanel>
+                                        </materialDesign:HintAssist.Hint>
+                                        <TextBox.Text>
+                                            <Binding Path="Lastname" Source="{StaticResource person}" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <services:NameValidationRuleService/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBox x:Name="tbPhoneNumber"
+                                        Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        Margin="0 10 60 0"
+                                        Width="200"
+                                        Height="50"
+                                        BorderBrush="#FF1773DA"
+                                        FontSize="14"
+                                        materialDesign:HintAssist.HelperText="E.g   055-123-45-67"
+                                        materialDesign:TextFieldAssist.UnderlineBrush="#FF1773DA"
+                                        CaretBrush="#FF1773DA"
+                                        materialDesign:TextFieldAssist.HasClearButton="True">
+                                        <materialDesign:HintAssist.Hint>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Phone" VerticalAlignment="Center" Height="25" Width="20" Foreground="#FF1773DA"/>
+                                                <TextBlock Text="Phone number" Padding="10 0 0 0" VerticalAlignment="Center" Foreground="#FF1773DA" />
+                                            </StackPanel>
+                                        </materialDesign:HintAssist.Hint>
+                                        <TextBox.Text>
+                                            <Binding Path="PhoneNumber" Source="{StaticResource person}" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <services:PhoneValidationRuleService/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+
+                                    <TextBox x:Name="tbEmail"
+                                        Margin="0 10 0 0"
+                                        Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        Width="200"
+                                        Height="50"
+                                        BorderBrush="#FF1773DA"
+                                        FontSize="14"
+                                        materialDesign:TextFieldAssist.HasClearButton="True"
+                                        materialDesign:TextFieldAssist.UnderlineBrush="#FF1773DA"
+                                        CaretBrush="#FF1773DA">
+                                        <materialDesign:HintAssist.Hint>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="EmailOutline" VerticalAlignment="Center" Height="25" Width="20" Foreground="#FF1773DA"/>
+                                                <TextBlock Text="Email" Padding="10 0 0 0" VerticalAlignment="Center" Foreground="#FF1773DA"/>
+                                            </StackPanel>
+                                        </materialDesign:HintAssist.Hint>
+                                        <TextBox.Text>
+                                            <Binding Path="Email" Source="{StaticResource person}" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <services:EmailValidationRuleService/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <PasswordBox x:Name="pbPassword"
+                                        Margin="0 20 60 0"
+                                        Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                                        Width="200"
+                                        Height="50"
+                                        BorderBrush="#FF1773DA"
+                                        FontSize="14"
+                                        materialDesign:TextFieldAssist.HasClearButton="True"
+                                        materialDesign:TextFieldAssist.UnderlineBrush="#FF1773DA"
+                                        CaretBrush="#FF1773DA"
+                                        materialDesign:HintAssist.HelperText="Must be at least 8 characters">
+                                        <materialDesign:HintAssist.Hint>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="Password" VerticalAlignment="Center" Height="25" Width="20" Foreground="#FF1773DA"/>
+                                                <TextBlock Text="New password" Padding="10 0 0 0" VerticalAlignment="Center" Foreground="#FF1773DA"/>
+                                            </StackPanel>
+                                        </materialDesign:HintAssist.Hint>
+                                    </PasswordBox>
+
+                                    <PasswordBox x:Name="pbConfirmPassword"
+                                        Margin="0 20 0 0"
+                                        Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
+                                        Width="200"
+                                        Height="50"
+                                        BorderBrush="#FF1773DA"
+                                        FontSize="14"
+                                        HorizontalAlignment="Left"
+                                        materialDesign:TextFieldAssist.HasClearButton="True"
+                                        materialDesign:TextFieldAssist.UnderlineBrush="#FF1773DA"
+                                        CaretBrush="#FF1773DA">
+                                        <materialDesign:HintAssist.Hint>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="PasswordReset" VerticalAlignment="Center" Height="25" Width="20" Foreground="#FF1773DA"/>
+                                                <TextBlock Text="Confirm password" Padding="10 0 0 0" VerticalAlignment="Center" Foreground="#FF1773DA"/>
+                                            </StackPanel>
+                                        </materialDesign:HintAssist.Hint>
+                                    </PasswordBox>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                                    <TextBox x:Name="tbUsername"
+                                        Margin="0 20 60 33"
+                                        Validation.ErrorTemplate="{StaticResource validationTemplate}"
+                                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                        Width="200"
+                                        Height="50"
+                                        BorderBrush="#FF1773DA"
+                                        FontSize="14"
+                                        materialDesign:TextFieldAssist.HasClearButton="True"
+                                        materialDesign:TextFieldAssist.UnderlineBrush="#FF1773DA"
+                                        CaretBrush="#FF1773DA">
+                                        <materialDesign:HintAssist.Hint>
+                                            <StackPanel Orientation="Horizontal">
+                                                <materialDesign:PackIcon Kind="UserOutline" VerticalAlignment="Center" Height="25" Width="20" Foreground="#FF1773DA"/>
+                                                <TextBlock Text="Username" Padding="10 0 0 0" VerticalAlignment="Center" Foreground="#FF1773DA"/>
+                                            </StackPanel>
+                                        </materialDesign:HintAssist.Hint>
+                                        <TextBox.Text>
+                                            <Binding Path="Username" Source="{StaticResource person}" UpdateSourceTrigger="PropertyChanged">
+                                                <Binding.ValidationRules>
+                                                    <services:UsernameValidationRuleService/>
+                                                </Binding.ValidationRules>
+                                            </Binding>
+                                        </TextBox.Text>
+                                    </TextBox>
+
+                                    <StackPanel>
+                                        <TextBox x:Name="tbregisterCode"
+                                            IsEnabled="False"
+                                            Margin="0 20 0 0"
+                                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                                            Width="200"
+                                            Height="50"
+                                            BorderBrush="#FF1773DA"
+                                            FontSize="14"
+                                            MaxLength="5"
+                                            materialDesign:TextFieldAssist.HasClearButton="True"
+                                            materialDesign:TextFieldAssist.UnderlineBrush="#FF1773DA"
+                                            CaretBrush="#FF1773DA">
+                                            <materialDesign:HintAssist.Hint>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <materialDesign:PackIcon Kind="EmailEditOutline" VerticalAlignment="Center" Height="25" Width="20" Foreground="#FF1773DA"/>
+                                                    <TextBlock Text="Register code" Padding="10 0 0 0" VerticalAlignment="Center" Foreground="#FF1773DA"/>
+                                                </StackPanel>
+                                            </materialDesign:HintAssist.Hint>
+                                        </TextBox>
+                                        <Button x:Name="btnSendCode"
+                                            BorderThickness="0"
+                                            Foreground="White"
+                                            Background="Red"
+                                            Height="24"
+                                            FontSize="12"
+                                            Width="90"
+                                            Margin="0 20 0 0"
+                                            materialDesign:ButtonAssist.CornerRadius="5"
+                                            HorizontalAlignment="Right"
+                                            Content="Send Code"
+                                            Command="{Binding SendCodeEmailCommand}"
+                                            ToolTip="Email send code"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <Button x:Name="btnSignUp"
+                                    Margin="0 20 0 0"
+                                    Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                                    Width="250"
+                                    Height="40"
+                                    FontFamily="Netflix Sans"
+                                    FontSize="18"
+                                    FontWeight="SemiBold"
+                                    Background="Red"
+                                    BorderThickness="0"
+                                    Command="{Binding SignUpPCommand}"
+                                    IsEnabled="False"
+                                    materialDesign:ButtonAssist.CornerRadius="10">
+                                    <TextBlock Text="Sign Up"/>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>
