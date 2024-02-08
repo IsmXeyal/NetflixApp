@@ -69,8 +69,8 @@ public class SignInPageViewModel : NotificationService
                         {
                             timer.Stop();
 
-                            //MovieView_ movieView_ = new(CurrentPerson, 0);
-                            //SignInPageView?.NavigationService.Navigate(movieView_);
+                            MovieView_ movieView_ = new(CurrentPerson, 0);
+                            SignInPageView?.NavigationService.Navigate(movieView_);
                         };
                     }
                     else if (context.People.Any(u => u.Email == SignInPageView.tbEmail.Text && u.Password != SignInPageView.pbPassword.Password))
@@ -86,8 +86,8 @@ public class SignInPageViewModel : NotificationService
         cfg.PositionProvider = new WindowPositionProvider(
             parentWindow: Application.Current.MainWindow,
             corner: Corner.TopRight,
-            offsetX: 175,
-            offsetY: 35);
+            offsetX: 425,
+            offsetY: 85);
 
         cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
             notificationLifetime: TimeSpan.FromSeconds(2),

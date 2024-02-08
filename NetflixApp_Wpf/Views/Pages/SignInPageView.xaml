@@ -96,7 +96,7 @@
                     <materialDesign:HintAssist.Hint>
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="EmailOutline" VerticalAlignment="Center" Height="25" Width="20" Margin="0 -5 0 0" Foreground="White" />
-                            <TextBlock Text="Email" Margin="5 -1 0 5" VerticalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="Email" Margin="5 -2 0 5" VerticalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </materialDesign:HintAssist.Hint>
                 </TextBox>
@@ -117,8 +117,8 @@
                     CaretBrush="White">
                     <materialDesign:HintAssist.Hint>
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="LockOutline" VerticalAlignment="Center" Height="25" Width="20" Margin="0 -5 0 0" Foreground="White"/>
-                            <TextBlock Text="Password" Margin="5 0 0 5" VerticalAlignment="Center" Foreground="White"/>
+                            <materialDesign:PackIcon Kind="LockOutline" VerticalAlignment="Center" Height="25" Width="20" Margin="0 -4 0 0" Foreground="White"/>
+                            <TextBlock Text="Password" Margin="5 -2 0 5" VerticalAlignment="Center" Foreground="White"/>
                         </StackPanel>
                     </materialDesign:HintAssist.Hint>
                 </PasswordBox>
