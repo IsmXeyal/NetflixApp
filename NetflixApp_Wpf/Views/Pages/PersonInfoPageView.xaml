@@ -23,7 +23,7 @@
 
     <Grid>
         <Grid.Background >
-            <ImageBrush ImageSource="..\..\StaticFiles\Images\fon.jpg"/>
+            <ImageBrush ImageSource="..\..\StaticFiles\Images\fon.jpg" Stretch="UniformToFill"/>
         </Grid.Background>
         <Canvas>
             <Button x:Name="btnBack" ToolTip="Back" 

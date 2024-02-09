@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using NetflixApp_Wpf.Command;
+﻿using NetflixApp_Wpf.Command;
 using NetflixApp_Wpf.Views.Pages;
 using NetflixAppDomainLayer.Entities.Concretes;
 using System.Windows.Input;
@@ -13,6 +12,7 @@ using ToastNotifications.Messages;
 using NetflixApp_Wpf.Services.Validations;
 using NetflixAppDataAccessLayer.Contexts;
 using NetflixApp_Wpf.Services;
+using Microsoft.Win32;
 
 namespace NetflixApp_Wpf.ViewModels.PageViewModels;
 
@@ -25,6 +25,7 @@ public class PersonInfoPageViewModel : NotificationService
     public ICommand? UpdatePassCommand { get; set; }
     public ICommand? UpdatePersonCommand { get; set; }
     public ICommand? EditCommand { get; set; }
+    public ICommand? AddPhotoCommand { get; set; }
     private Random _randomCode { get; set; }
     private Person? _currentPerson { get; set; }
     public Person? CurrentPerson
@@ -36,6 +37,7 @@ public class PersonInfoPageViewModel : NotificationService
     NetflixDbContext context = new();
     public PersonInfoPageViewModel(PersonInfoPageView personInfoPageView, Person? currentPerson)
     {
+
         PersonInfoPageVieww = personInfoPageView;
         CurrentPerson = currentPerson;
 
@@ -65,6 +67,40 @@ public class PersonInfoPageViewModel : NotificationService
                     personInfoPageView.btn_add.IsEnabled = true;
                     personInfoPageView.btn_edit.IsEnabled = false;
                     personInfoPageView.myEdit.Visibility = Visibility.Hidden;
+                },
+                pre => true);
+
+        AddPhotoCommand = new RelayCommand(
+                action =>
+                {
+                    var openFileDialog = new OpenFileDialog
+                    {
+                        Filter = "Image files (*.png;*.jpeg;*.jpg;*.gif;*.bmp)|*.png;*.jpeg;*.jpg;*.gif;*.bmp|All files (*.*)|*.*"
+                    };
+                    if (openFileDialog.ShowDialog() == true)
+                    {
+                        try
+                        {
+                            var selectedPerson = context.People.FirstOrDefault(person => person.Email == CurrentPerson!.Email);
+                            if (selectedPerson != null)
+                            {
+                                string selectedImagePath = openFileDialog.FileName;
+                                selectedPerson.Image = selectedImagePath;
+                                CurrentPerson!.Image = selectedImagePath;
+                                context.SaveChanges();
+                                OnPropertyChanged(nameof(CurrentPerson));
+                                notifier.ShowSuccess("Profile photo updated successfully.");
+                            }
+                            else
+                            {
+                                notifier.ShowWarning("Selected person not found.");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            notifier.ShowError("An error occurred while updating the profile photo: " + ex.Message);
+                        }
+                    }
                 },
                 pre => true);
 
@@ -109,32 +145,25 @@ public class PersonInfoPageViewModel : NotificationService
                     {
                         try
                         {
-                            //Con.Open();
-                            //SqlCommand cmd = new SqlCommand("UPDATE People SET Firstname = @Firstname, Lastname = @Lastname, " +
-                            //                                "PhoneNumber = @PhoneNumber, Username = @Username " +
-                            //                                "WHERE Email = @Email", Con);
+                            var selectedPerson = context.People.FirstOrDefault(person => person.Email == CurrentPerson!.Email);
 
-                            //cmd.Parameters.AddWithValue("@Firstname", PersonInfoPageVieww.tbName.Text);
-                            //cmd.Parameters.AddWithValue("@Lastname", PersonInfoPageVieww.tbSurname.Text);
-                            //cmd.Parameters.AddWithValue("@PhoneNumber", PersonInfoPageVieww.tbPhone.Text);
-                            //cmd.Parameters.AddWithValue("@Username", PersonInfoPageVieww.tbUsername.Text);
-                            //cmd.Parameters.AddWithValue("@Email", CurrentPerson?.Email);
-
-                            //// Execute the SqlCommand to insert the new user
-                            //cmd.ExecuteNonQuery();
-                            //Con.Close();
+                            if (selectedPerson != null)
+                            {
+                                selectedPerson.PhoneNumber = personInfoPageView.tbPhone.Text;
+                                selectedPerson.Lastname = personInfoPageView.tbSurname.Text;
+                                selectedPerson.Firstname = personInfoPageView.tbName.Text;
+                                selectedPerson.Username = personInfoPageView.tbUsername.Text;
+                                context.SaveChanges();
+                            }
+                            else
+                            {
+                                notifier.ShowWarning("Selected person not found.");
+                            }
                         }
                         catch (Exception ex)
                         {
                             notifier.ShowError("Error updating datas in the database: " + ex.Message);
                         }
-
-                        //var selectedPerson = context.People.FirstOrDefault(person => person.Email == CurrentPerson?.Email);
-
-                        //selectedPerson!.PhoneNumber = personInfoPageView.tbPhone.Text;
-                        //selectedPerson!.Lastname = personInfoPageView.tbSurname.Text;
-                        //selectedPerson!.Firstname = personInfoPageView.tbName.Text;
-                        //selectedPerson!.Username = personInfoPageView.tbUsername.Text;
 
                         notifier.ShowSuccess("Datas changed successfully.");
                         PersonInfoPageVieww.tbName.IsEnabled = false;
@@ -142,6 +171,9 @@ public class PersonInfoPageViewModel : NotificationService
                         PersonInfoPageVieww.tbPhone.IsEnabled = false;
                         PersonInfoPageVieww.tbUsername.IsEnabled = false;
                         PersonInfoPageVieww.Update.IsEnabled = false;
+                        PersonInfoPageVieww.btn_add.IsEnabled = false;
+                        personInfoPageView.btn_edit.IsEnabled = true;
+                        personInfoPageView.myEdit.Visibility = Visibility.Visible;
                     }
                 },
                 pre => true);
@@ -167,32 +199,32 @@ public class PersonInfoPageViewModel : NotificationService
                     {
                         try
                         {
-                            //Con.Open();
-                            //SqlCommand cmd = new SqlCommand("UPDATE People SET [Password] = @Password " +
-                            //                                "WHERE Email = @Email", Con);
+                            var selectedPerson = context.People.FirstOrDefault(person => person.Email == CurrentPerson!.Email);
 
-                            //cmd.Parameters.AddWithValue("@Password", PersonInfoPageVieww.pbPassword.Password);
-                            //cmd.Parameters.AddWithValue("@Email", CurrentPerson?.Email);
-
-                            //// Execute the SqlCommand to insert the new user
-                            //cmd.ExecuteNonQuery();
-                            //Con.Close();
+                            if (selectedPerson != null)
+                            {
+                                selectedPerson!.Password = personInfoPageView.pbPassword.Password;
+                                notifier.ShowSuccess("Password changed successfully.");
+                                var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2.5) };
+                                timer.Start();
+                                timer.Tick += (sender, args) =>
+                                {
+                                    timer.Stop();
+                                };
+                                context.SaveChanges();
+                                PersonInfoPageVieww.UpdatePass.IsEnabled = false;
+                                PersonInfoPageView personInfo = new(currentPerson);
+                                PersonInfoPageVieww.NavigationService.Navigate(personInfo);
+                            }
+                            else
+                            {
+                                notifier.ShowWarning("Selected person not found.");
+                            }
                         }
                         catch (Exception ex)
                         {
                             notifier.ShowError("Error updating password in the database: " + ex.Message);
                         }
-
-                        //var person = db.loadedPeople.FirstOrDefault(person => person.Email == CurrentPerson?.Email);
-                        //person!.Password = personInfoPageView.pbPassword.Password;
-                        //notifier.ShowSuccess("Password changed successfully.");
-                        //var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(2.5) };
-                        //timer.Start();
-                        //timer.Tick += (sender, args) =>
-                        //{
-                        //    timer.Stop();
-                        //};
-                        PersonInfoPageVieww.UpdatePass.IsEnabled = false;
                     }
                 },
                 pre => true);

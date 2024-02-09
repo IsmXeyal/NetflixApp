@@ -54,8 +54,6 @@ public class MovieView_Model : NotificationService
     //    set { film_view = value; OnPropertyChanged(); }
     //}
 
-
-    //Database db = new();
     private int selectedMovieIndex = 0;
     private DispatcherTimer? timer;
 

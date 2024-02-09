@@ -16,7 +16,7 @@ internal class PersonConfiguration : IEntityTypeConfiguration<Person>
         builder.Property(x => x.Username).IsRequired();
         builder.Property(x => x.Email).IsRequired();
         builder.Property(x => x.Password).IsRequired();
-        builder.Property(x => x.Image).IsRequired();
+        builder.Property(x => x.Image).IsRequired().HasColumnType("nvarchar(max)");
         builder.Property(x => x.PhoneNumber).IsRequired();
     }
 }
