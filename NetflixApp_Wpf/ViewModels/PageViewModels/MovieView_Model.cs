@@ -16,14 +16,13 @@ namespace NetflixApp_Wpf.ViewModels.PageViewModels;
 public class MovieView_Model : NotificationService
 {
     public MovieView_? MovieVieww { get; set; }
-    public Person CurrentPerson { get; set; }
     public ICommand? ExitAppCommand { get; set; }
     public ICommand? PlayCommand { get; set; }
     public ICommand? TrailerCommand { get; set; }
     public ICommand? MinimizeAppCommand { get; set; }
     public ICommand? WatchCommand { get; set; }
     public ICommand? GoSeriesCommand { get; set; }
-    public ICommand? GoPersonCommand { get; set; }
+    public ICommand? PersonItemCommand { get; set; }
     public ICommand? GoNewCommand { get; set; }
     public ICommand? AddListCommand { get; set; }
     public ICommand? GoListCommand { get; set; }
@@ -31,6 +30,13 @@ public class MovieView_Model : NotificationService
     public ICommand? SearchCommand { get; set; }
 
     public int countClickMaximize = 0;
+
+    private Person? _currentPerson { get; set; }
+    public Person? CurrentPerson
+    {
+        get { return _currentPerson; }
+        set { _currentPerson = value; OnPropertyChanged(); }
+    }
 
     //private Movie? _selectedMovie;
 
@@ -51,7 +57,7 @@ public class MovieView_Model : NotificationService
 
     //Database db = new();
     private int selectedMovieIndex = 0;
-    private DispatcherTimer timer;
+    private DispatcherTimer? timer;
 
     public MovieView_Model(MovieView_ movieView, Person currentPerson, int ranking)
     {
@@ -87,13 +93,13 @@ public class MovieView_Model : NotificationService
         //        },
         //        pre => true);
 
-        //GoPersonCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            PersonInfoPageView personInfo = new(currentPerson);
-        //            MovieVieww.NavigationService.Navigate(personInfo);
-        //        },
-        //        pre => true);
+        PersonItemCommand = new RelayCommand(
+                action =>
+                {
+                    PersonInfoPageView personInfo = new(currentPerson);
+                    MovieVieww.NavigationService.Navigate(personInfo);
+                },
+                pre => true);
 
         //GoSeriesCommand = new RelayCommand(
         //        action =>

@@ -49,13 +49,13 @@
                                            Storyboard.TargetName="PersonItem">
                 <EasingDoubleKeyFrame KeyTime="0" Value="-200"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-200"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1.7" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" 
                                            Storyboard.TargetName="SettingItem">
                 <EasingDoubleKeyFrame KeyTime="0" Value="-200"/>
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-200"/>
-                <EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="0"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:1.9" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" 
                                            Storyboard.TargetName="button">
@@ -109,94 +109,94 @@
                     </Button.RenderTransform>
                 </Button>
             </StackPanel>
-            <ListView x:Name="ListMain" Margin="0 30">
-                <ListViewItem x:Name="EditorItem" Height="60" RenderTransformOrigin="0.5 0.5">
-                    <ListViewItem.RenderTransform>
+            <StackPanel x:Name="StackPanelMain" Margin="0 30">
+                <Button x:Name="EditorItem" Height="60" RenderTransformOrigin="0.5 0.5" Background="Transparent" BorderBrush="Transparent" Command="{Binding EditorItemCommand}">
+                    <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
                             <SkewTransform/>
                             <RotateTransform/>
                             <TranslateTransform/>
                         </TransformGroup>
-                    </ListViewItem.RenderTransform>
-                    <StackPanel Orientation="Horizontal" Margin="10 0">
+                    </Button.RenderTransform>
+                    <StackPanel Orientation="Horizontal" Margin="0 0 90 0">
                         <materialDesign:PackIcon Kind="Home" Width="30" Height="30" VerticalAlignment="Center" Margin="5" Foreground="White"/>
-                        <TextBlock Text="Home" Margin="10" VerticalAlignment="Center" Foreground="White"/>
+                        <TextBlock Text="Home" Margin="10" VerticalAlignment="Center" Foreground="White" />
                     </StackPanel>
-                </ListViewItem>
-                <ListViewItem x:Name="MoviesItem" Height="60" RenderTransformOrigin="0.5,0.5">
-                    <ListViewItem.RenderTransform>
+                </Button>
+                <Button x:Name="MoviesItem" Height="60" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" Command="{Binding MoviesItemCommand}">
+                    <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
                             <SkewTransform/>
                             <RotateTransform/>
                             <TranslateTransform/>
                         </TransformGroup>
-                    </ListViewItem.RenderTransform>
-                    <StackPanel Orientation="Horizontal" Margin="10 0">
+                    </Button.RenderTransform>
+                    <StackPanel Orientation="Horizontal" Margin="0 0 90 0">
                         <materialDesign:PackIcon Kind="LocalMovies" Width="30" Height="30" VerticalAlignment="Center" Margin="5" Foreground="White"/>
                         <TextBlock Text="Movies" Margin="10" VerticalAlignment="Center" Foreground="White"/>
                     </StackPanel>
-                </ListViewItem>
-                <ListViewItem x:Name="TvShowsItem" Height="60" RenderTransformOrigin="0.5,0.5">
-                    <ListViewItem.RenderTransform>
+                </Button>
+                <Button x:Name="TvShowsItem" Height="60" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" Command="{Binding TvShowsItemCommand}">
+                    <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
                             <SkewTransform/>
                             <RotateTransform/>
                             <TranslateTransform/>
                         </TransformGroup>
-                    </ListViewItem.RenderTransform>
-                    <StackPanel Orientation="Horizontal" Margin="10 0">
+                    </Button.RenderTransform>
+                    <StackPanel Orientation="Horizontal" Width="120" Margin="0 0 70 0">
                         <materialDesign:PackIcon Kind="YoutubeTv" Width="30" Height="30" VerticalAlignment="Center" Margin="5" Foreground="White"/>
                         <TextBlock Text="TV Shows" Margin="10" VerticalAlignment="Center" Foreground="White"/>
                     </StackPanel>
-                </ListViewItem>
-                <ListViewItem x:Name="NewPopularItem" Height="60" RenderTransformOrigin="0.5,0.5">
-                    <ListViewItem.RenderTransform>
+                </Button>
+                <Button x:Name="NewPopularItem" Height="60" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" Command="{Binding NewPopularItemCommand}">
+                    <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
                             <SkewTransform/>
                             <RotateTransform/>
                             <TranslateTransform/>
                         </TransformGroup>
-                    </ListViewItem.RenderTransform>
-                    <StackPanel Orientation="Horizontal" Margin="10 0">
+                    </Button.RenderTransform>
+                    <StackPanel Orientation="Horizontal" Width="150" Margin="0 0 40 0">
                         <materialDesign:PackIcon Kind="NewReleases" Width="30" Height="30" VerticalAlignment="Center" Margin="5" Foreground="White"/>
                         <TextBlock Text="New / Popular" Margin="10" VerticalAlignment="Center" Foreground="White"/>
                     </StackPanel>
-                </ListViewItem>
-                <ListViewItem x:Name="PersonItem" Height="60" RenderTransformOrigin="0.5,0.5">
-                    <ListViewItem.RenderTransform>
+                </Button>
+                <Button x:Name="PersonItem" Height="60" RenderTransformOrigin="0.5 0.5" Background="Transparent" BorderBrush="Transparent" Command="{Binding PersonItemCommand}">
+                    <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
                             <SkewTransform/>
                             <RotateTransform/>
                             <TranslateTransform/>
                         </TransformGroup>
-                    </ListViewItem.RenderTransform>
-                    <StackPanel Orientation="Horizontal" Margin="10 0">
+                    </Button.RenderTransform>
+                    <StackPanel Orientation="Horizontal" Width="140" Margin="0 0 50 0">
                         <materialDesign:PackIcon Kind="User" Width="30" Height="30" VerticalAlignment="Center" Margin="5" Foreground="White"/>
                         <TextBlock Text="Personal Info" Margin="10" VerticalAlignment="Center" Foreground="White"/>
                     </StackPanel>
-                </ListViewItem>
-                <ListViewItem x:Name="SettingItem" Height="60" RenderTransformOrigin="0.5,0.5">
-                    <ListViewItem.RenderTransform>
+                </Button>
+                <Button x:Name="SettingItem" Height="60" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" Command="{Binding SettingItemCommand}">
+                    <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
                             <SkewTransform/>
                             <RotateTransform/>
                             <TranslateTransform/>
                         </TransformGroup>
-                    </ListViewItem.RenderTransform>
-                    <StackPanel Orientation="Horizontal" Margin="10 0">
+                    </Button.RenderTransform>
+                    <StackPanel Orientation="Horizontal" Width="110" Margin="0 0 80 0">
                         <materialDesign:PackIcon Kind="Settings" Width="30" Height="30" VerticalAlignment="Center" Margin="5" Foreground="White"/>
                         <TextBlock Text="Settings" Margin="10" VerticalAlignment="Center" Foreground="White"/>
                     </StackPanel>
-                </ListViewItem>
-            </ListView>
+                </Button>
+            </StackPanel>
         </StackPanel>
-        
+
         <Grid x:Name="GridMain" Background="Black" Width="1090" RenderTransformOrigin="0.5,0.5" 
               Margin="60 0 0 0" >
             <Grid.RowDefinitions>
@@ -332,7 +332,7 @@
                 <Canvas Grid.Row="0" Background="Black" x:Name="CanvasMenu">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="..\..\StaticFiles\Images\netfl.jpg" Height="80" Width="150" Margin="20 -40 10 0"/>
-        
+
                         <TextBox x:Name="tbSearch" Width="300" Height="40" Margin="410 5 5 0" Background="#FF2D2B2B"
                             Padding="10 0 40 5"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
@@ -429,13 +429,13 @@
                 </Canvas>
                 <Grid Grid.Row="1" Background="Black">
                     <Grid>
-                        <Grid.Background>
+                        <!--<Grid.Background>
                             <ImageBrush ImageSource="{Binding SelectedMovie.image}" Stretch="UniformToFill" />
-                        </Grid.Background>
+                        </Grid.Background>-->
                         <Grid VerticalAlignment="Center" Width="360" Height="380" HorizontalAlignment="Left" Margin="25 0">
                             <Rectangle Width="350" Height="380" Fill="Black" Opacity="0.8"/>
                             <StackPanel>
-                                <TextBlock                        
+                                <!--<TextBlock                        
                                     FontSize="25"
                                     Text="{Binding SelectedMovie.title}"
                                     TextAlignment="Justify"
@@ -446,11 +446,11 @@
                                     Foreground="White"
                                     FontWeight="DemiBold"
                                     HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"/>
+                                    VerticalAlignment="Top"/>-->
 
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="IMDB" Foreground="White" FontWeight="Bold" Margin="40 2 0 5"/>
-                                    <TextBlock                        
+                                    <!--<TextBlock                        
                                         FontSize="14"
                                         Text="{Binding SelectedMovie.rating}"
                                         Width="25"
@@ -460,9 +460,9 @@
                                         Foreground="Gold"
                                         FontWeight="DemiBold"
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Top"/>
+                                        VerticalAlignment="Top"/>-->
                                     <Label Content="YEAR" Foreground="White" FontWeight="Bold" Margin="40 2 0 5"/>
-                                    <TextBlock                        
+                                    <!--<TextBlock                        
                                         FontSize="14"
                                         Text="{Binding SelectedMovie.year}"
                                         Width="45"
@@ -472,10 +472,10 @@
                                         Foreground="#FF18D63E"
                                         FontWeight="DemiBold"
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Top"/>
+                                        VerticalAlignment="Top"/>-->
                                 </StackPanel>
 
-                                <TextBlock                        
+                                <!--<TextBlock                        
                                     FontSize="11"
                                     Text="{Binding SelectedMovie.description}"
                                     TextAlignment="Justify"
@@ -486,7 +486,7 @@
                                     Foreground="White"
                                     FontWeight="SemiBold"
                                     HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"/>
+                                    VerticalAlignment="Top"/>-->
                                 <StackPanel Orientation="Horizontal">
                                     <Button 
                                         Background="White"
@@ -642,7 +642,7 @@
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Height="30" Margin="20 0">
-                                    <ItemsControl ItemsSource="{Binding SelectedMovie.genre}">
+                                    <!--<ItemsControl ItemsSource="{Binding SelectedMovie.genre}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal" />
@@ -654,7 +654,7 @@
                                                     Foreground="White" Width="100" Height="20" Margin="0 5 7 5" Background="#FF191818"/>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
+                                    </ItemsControl>-->
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
