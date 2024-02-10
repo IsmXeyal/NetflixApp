@@ -324,7 +324,7 @@
             <ScrollViewer Width="700" HorizontalAlignment="Right">
                 <StackPanel>
                     <Image Source="..\..\StaticFiles\Images\netfl.jpg" Width="200" Height="80"  HorizontalAlignment="Left" Margin="20 -10 0 0"/>
-                    <TextBlock Text="{Binding SelectedMovie.Year}" Foreground="#FF18D63E" TextWrapping="Wrap" TextAlignment="Center" Padding="27 5"
+                    <TextBlock x:Name="YearT" Text="{Binding SelectedMovie.Year}" Foreground="#FF18D63E" TextWrapping="Wrap" TextAlignment="Center" Padding="27 5"
                         FontWeight="Bold" FontSize="20" Width="110" Height="40" Margin="320 -10 0 0"/>
                     <Border BorderBrush="DarkGoldenrod" BorderThickness="1" Width="80" Height="30" Margin="520 -40 0 0" Background="DarkGoldenrod" CornerRadius="5">
                         <TextBlock Text="{Binding SelectedMovie.Rating}" Foreground="White" TextWrapping="Wrap" TextAlignment="Left" Padding="20 2 0 0"

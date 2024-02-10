@@ -16,15 +16,15 @@ using ToastNotifications.Position;
 
 namespace NetflixApp_Wpf.ViewModels.PageViewModels;
 
-public class WatchMovieViewModel : NotificationService
+public class WatchTvShowViewModel : NotificationService
 {
     public WatchMovieView? WatchMovieVieww { get; set; }
     public Person? CurrentPerson { get; set; }
     public int Index { get; set; }
 
-    private ObservableCollection<EditorChoiceDTO>? _movies;
+    private ObservableCollection<MovieTvShowDTO>? _movies;
 
-    public ObservableCollection<EditorChoiceDTO>? Moviess
+    public ObservableCollection<MovieTvShowDTO>? Moviess
     {
         get { return _movies; }
         set { _movies = value; OnPropertyChanged(); }
@@ -39,9 +39,9 @@ public class WatchMovieViewModel : NotificationService
     public string? Video_Link { get; set; }
     public string? Imdb_Link { get; set; }
 
-    private EditorChoiceDTO? _selectedMovie;
+    private MovieTvShowDTO? _selectedMovie;
 
-    public EditorChoiceDTO? SelectedMovie
+    public MovieTvShowDTO? SelectedMovie
     {
         get { return _selectedMovie; }
         set { _selectedMovie = value; OnPropertyChanged(); }
@@ -56,18 +56,33 @@ public class WatchMovieViewModel : NotificationService
     }
 
     public string? filePath = "../../../DTOs/CurrentPersonEmail.txt";
-    public WatchMovieViewModel(WatchMovieView watchMovie, Person person, int index, int langId, int type)
+    public WatchTvShowViewModel(WatchMovieView watchMovie, Person person, int index, int langId, int type)
     {
         WatchMovieVieww = watchMovie;
         CurrentPerson = person;
         Index = index;
 
-        UpdateMovies(langId);
+        switch (GlobalStringCommand.Commaand)
+        {
+            case "Top250Movie":
+                UpdateTop250MovieFromDatabase(langId);
+                break;
+            case "Top250TvShow":
+                UpdateTop250TvShowFromDatabase(langId);
+                break;
+            case "Popularmovies":
+                UpdatePopularMoviesFromDatabase(langId);
+                break;
+            case "PopularTvShow":
+                UpdatePopularTvShowsFromDatabase(langId);
+                break;
+            default:
+                return;
+        }
 
         if (Index > 0 && Index <= Moviess!.Count)
         {
             SelectedMovie = Moviess[Index - 1];
-            Video_Link = SelectedMovie.Video_link;
             Imdb_Link = SelectedMovie.Imdb_link;
         }
 
@@ -99,8 +114,25 @@ public class WatchMovieViewModel : NotificationService
         BackCommand = new RelayCommand(
                 action =>
                 {
-                    var movieView = new MovieView_(person, Index);
-                    WatchMovieVieww?.NavigationService?.Navigate(movieView);
+                    TvShowsPageView tvShowss;
+                    switch (GlobalStringCommand.Commaand)
+                    {
+                        case "Top250Movie":
+                            tvShowss = new TvShowsPageView(CurrentPerson!, "Top250Movie");
+                            break;
+                        case "Top250TvShow":
+                            tvShowss = new TvShowsPageView(CurrentPerson!, "Top250TvShow");
+                            break;
+                        case "Popularmovies":
+                            tvShowss = new TvShowsPageView(CurrentPerson!, "Popularmovies");
+                            break;
+                        case "PopularTvShow":
+                            tvShowss = new TvShowsPageView(CurrentPerson!, "PopularTvShow");
+                            break;
+                        default:
+                            return;
+                    }
+                    WatchMovieVieww.NavigationService.Navigate(tvShowss);
                 },
                 pre => true);
 
@@ -186,26 +218,92 @@ public class WatchMovieViewModel : NotificationService
         //        pre => selectedMovie != null);
     }
 
-    private void UpdateMovies(int num)
+    private void UpdateTop250MovieFromDatabase(int num)
     {
-        EditorChoiceRepository editorChoice = new();
-        ICollection<EditorChoice> selection = editorChoice!.GetAllWithLanguages()!;
-        IEnumerable<EditorChoiceDTO> dtoList = selection
+        Top250MovieRepository topMovie = new Top250MovieRepository();
+        ICollection<Top250Movie> selection = topMovie!.GetAllWithLanguages()!;
+        IEnumerable<MovieTvShowDTO> dtoList = selection
             .Where(ec => ec.Languages!.Any(l => l.Id == num))
-            .Select(ec => new EditorChoiceDTO
+            .Select(ec => new MovieTvShowDTO
             {
+                Id = ec.Id,
                 Name = ec.Name,
                 Image = ec.Image_link,
                 Imdb_link = ec.Imdb_link,
-                Video_link = ec.Video_link,
-                Rank = ec.Rank,
+                Duration = ec.Duration,
                 Description = ec.Plot,
                 Year = ec.Year,
                 Rating = ec.Imdb_rating,
-                Genre = new ObservableCollection<string>(collection: ec.Genres!.Select(g => g.Name!))
+                Genre = new ObservableCollection<string>(ec.Genres!.Select(g => g.Name!))
             });
 
-        Moviess = new ObservableCollection<EditorChoiceDTO>(dtoList);
+        Moviess = new ObservableCollection<MovieTvShowDTO>(dtoList);
+    }
+
+    private void UpdateTop250TvShowFromDatabase(int num)
+    {
+        Top250TvShowRepository topTv = new Top250TvShowRepository();
+        ICollection<Top250TvShow> selection = topTv!.GetAllWithLanguages()!;
+        IEnumerable<MovieTvShowDTO> dtoList = selection
+            .Where(ec => ec.Languages!.Any(l => l.Id == num))
+            .Select(ec => new MovieTvShowDTO
+            {
+                Id = ec.Id,
+                Name = ec.Name,
+                Image = ec.Image_link,
+                Imdb_link = ec.Imdb_link,
+                Duration = ec.Duration,
+                Description = ec.Plot,
+                Year = ec.Year,
+                Rating = ec.Imdb_rating,
+                Genre = new ObservableCollection<string>(ec.Genres!.Select(g => g.Name!))
+            });
+
+        Moviess = new ObservableCollection<MovieTvShowDTO>(dtoList);
+    }
+
+    private void UpdatePopularMoviesFromDatabase(int num)
+    {
+        MostPopularMovieRepository topMovie = new MostPopularMovieRepository();
+        ICollection<MostPopularMovie> selection = topMovie!.GetAllWithLanguages()!;
+        IEnumerable<MovieTvShowDTO> dtoList = selection
+            .Where(ec => ec.Languages!.Any(l => l.Id == num))
+            .Select(ec => new MovieTvShowDTO
+            {
+                Id = ec.Id,
+                Name = ec.Name,
+                Image = ec.Image_link,
+                Imdb_link = ec.Imdb_link,
+                Duration = ec.Duration,
+                Description = ec.Plot,
+                Year = ec.Year,
+                Rating = ec.Imdb_rating,
+                Genre = new ObservableCollection<string>(ec.Genres!.Select(g => g.Name!))
+            });
+
+        Moviess = new ObservableCollection<MovieTvShowDTO>(dtoList);
+    }
+
+    private void UpdatePopularTvShowsFromDatabase(int num)
+    {
+        MostPopularTvShowRepository toptv = new MostPopularTvShowRepository();
+        ICollection<MostPopularTvShow> selection = toptv!.GetAllWithLanguages()!;
+        IEnumerable<MovieTvShowDTO> dtoList = selection
+            .Where(ec => ec.Languages!.Any(l => l.Id == num))
+            .Select(ec => new MovieTvShowDTO
+            {
+                Id = ec.Id,
+                Name = ec.Name,
+                Image = ec.Image_link,
+                Imdb_link = ec.Imdb_link,
+                Duration = ec.Duration,
+                Description = ec.Plot,
+                Year = ec.Year,
+                Rating = ec.Imdb_rating,
+                Genre = new ObservableCollection<string>(ec.Genres!.Select(g => g.Name!))
+            });
+
+        Moviess = new ObservableCollection<MovieTvShowDTO>(dtoList);
     }
 
     Notifier notifier = new(cfg =>

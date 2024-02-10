@@ -55,9 +55,9 @@ public partial class MovieView_ : Page
             WatchMovieView watchMovieView;
 
             if (this.chng_language.IsChecked == false)
-                watchMovieView = new WatchMovieView(CurrentPerson!, rank, 1);
+                watchMovieView = new WatchMovieView(CurrentPerson!, rank, 1, 1);
             else
-                watchMovieView = new WatchMovieView(CurrentPerson!, rank, 2);
+                watchMovieView = new WatchMovieView(CurrentPerson!, rank, 2, 1);
 
             NavigationService?.Navigate(watchMovieView);
         }

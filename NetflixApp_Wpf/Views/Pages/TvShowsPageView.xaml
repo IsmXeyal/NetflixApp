@@ -208,7 +208,7 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Vertical" Margin="0 5 10 0">
-                                    <Button x:Name="movieB"  Width="200" Height="280" Margin="10 5 0 0" BorderThickness="2" BorderBrush="Black">
+                                    <Button x:Name="movieT"  Width="200" Height="280" Margin="10 5 0 0" BorderThickness="2" BorderBrush="Black" Click="movieT_Click">
                                         <Button.Background>
                                             <ImageBrush ImageSource="{Binding Image}" Stretch="Uniform"/>
                                         </Button.Background>

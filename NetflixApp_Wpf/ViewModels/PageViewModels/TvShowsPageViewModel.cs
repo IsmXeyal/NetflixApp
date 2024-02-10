@@ -4,13 +4,22 @@ using NetflixApp_Wpf.Services;
 using NetflixApp_Wpf.Views.Pages;
 using NetflixAppDataAccessLayer.Repositories.Concretes;
 using NetflixAppDomainLayer.Entities.Concretes;
-using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Messages;
+using ToastNotifications.Position;
 
 namespace NetflixApp_Wpf.ViewModels.PageViewModels;
+
+public static class GlobalStringCommand
+{
+    public static string? Commaand { get; set; }
+}
 
 public class TvShowsPageViewModel : NotificationService
 {
@@ -20,6 +29,7 @@ public class TvShowsPageViewModel : NotificationService
     public ICommand? BackCommand { get; set; }
     public ICommand? ExitAppCommand { get; set; }
     public ICommand? ChangeCommand { get; set; }
+    public ICommand? SearchCommand { get; set; }
 
     private string? _command;
 
@@ -64,6 +74,7 @@ public class TvShowsPageViewModel : NotificationService
         tvShowsPageView = tvShows;
         CurrentPerson = currentPerson;
         Commandd = commandd;
+        GlobalStringCommand.Commaand = commandd;
         TvShows = new ObservableCollection<MovieTvShowDTO>();
         num = 1;
         MyLangSource2 = "../../../StaticFiles/Images/usa.jpg";
@@ -90,6 +101,32 @@ public class TvShowsPageViewModel : NotificationService
                 {
                     var movieView = new MovieView_(currentPerson!, 0);
                     tvShowsPageView?.NavigationService?.Navigate(movieView);
+                },
+                pre => true);
+
+        SearchCommand = new RelayCommand(
+                action =>
+                {
+                    var searchText = tvShowsPageView?.tbSearch2?.Text?.Trim();
+                    if (!string.IsNullOrEmpty(searchText))
+                    {
+                        // When you use (StringComparison.OrdinalIgnoreCase) in string operations, it means that the comparison
+                        // will ignore the case of the characters
+                        var searchResults = TvShows?.Where(movie => movie!.Name!.Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToList();
+                        TvShows = new ObservableCollection<MovieTvShowDTO>(searchResults!);
+                    }
+                    else
+                    {
+                        notifier.ShowWarning("This Movie or Tv Show doesn't exist in Netflix.");
+                        DispatcherTimer timer = new();
+                        timer.Interval = TimeSpan.FromSeconds(3);
+                        timer.Tick += (sender, e) =>
+                        {
+                            timer.Stop();
+                            CommandCheck();
+                        };
+                        timer.Start();                       
+                    }
                 },
                 pre => true);
 
@@ -131,6 +168,7 @@ public class TvShowsPageViewModel : NotificationService
             .Where(ec => ec.Languages!.Any(l => l.Id == num))
             .Select(ec => new MovieTvShowDTO
             {
+                Id = ec.Id,
                 Name = ec.Name,
                 Image = ec.Image_link,
                 Imdb_link = ec.Imdb_link,
@@ -152,6 +190,7 @@ public class TvShowsPageViewModel : NotificationService
             .Where(ec => ec.Languages!.Any(l => l.Id == num))
             .Select(ec => new MovieTvShowDTO
             {
+                Id = ec.Id - 146,
                 Name = ec.Name,
                 Image = ec.Image_link,
                 Imdb_link = ec.Imdb_link,
@@ -173,6 +212,7 @@ public class TvShowsPageViewModel : NotificationService
             .Where(ec => ec.Languages!.Any(l => l.Id == num))
             .Select(ec => new MovieTvShowDTO
             {
+                Id = ec.Id,
                 Name = ec.Name,
                 Image = ec.Image_link,
                 Imdb_link = ec.Imdb_link,
@@ -194,6 +234,7 @@ public class TvShowsPageViewModel : NotificationService
             .Where(ec => ec.Languages!.Any(l => l.Id == num))
             .Select(ec => new MovieTvShowDTO
             {
+                Id = ec.Id - 1,
                 Name = ec.Name,
                 Image = ec.Image_link,
                 Imdb_link = ec.Imdb_link,
@@ -206,4 +247,19 @@ public class TvShowsPageViewModel : NotificationService
 
         TvShows = new ObservableCollection<MovieTvShowDTO>(dtoList);
     }
+
+    Notifier notifier = new(cfg =>
+    {
+        cfg.PositionProvider = new WindowPositionProvider(
+            parentWindow: Application.Current.MainWindow,
+            corner: Corner.TopRight,
+            offsetX: 5,
+            offsetY: 90);
+
+        cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+            notificationLifetime: TimeSpan.FromSeconds(2),
+            maximumNotificationCount: MaximumNotificationCount.FromCount(2));
+
+        cfg.Dispatcher = Application.Current.Dispatcher;
+    });
 }

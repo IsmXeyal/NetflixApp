@@ -127,9 +127,9 @@ public class MovieView_Model : NotificationService
                     WatchMovieView watchMovieView;
 
                     if (movieView.chng_language.IsChecked == false)
-                        watchMovieView = new WatchMovieView(CurrentPerson!, selectedMovieIndex + 1, 1);
+                        watchMovieView = new WatchMovieView(CurrentPerson!, selectedMovieIndex + 1, 1, 1);
                     else
-                        watchMovieView = new WatchMovieView(CurrentPerson!, selectedMovieIndex + 1, 2);
+                        watchMovieView = new WatchMovieView(CurrentPerson!, selectedMovieIndex + 1, 2, 1);
 
                     MovieVieww.NavigationService.Navigate(watchMovieView);
                 },
@@ -141,9 +141,9 @@ public class MovieView_Model : NotificationService
                     WatchMovieView watchMovieView;
 
                     if (movieView.chng_language.IsChecked == false)
-                        watchMovieView = new WatchMovieView(CurrentPerson!, selectedMovieIndex + 1, 1);
+                        watchMovieView = new WatchMovieView(CurrentPerson!, selectedMovieIndex + 1, 1, 1);
                     else
-                        watchMovieView = new WatchMovieView(CurrentPerson!, selectedMovieIndex + 1, 2);
+                        watchMovieView = new WatchMovieView(CurrentPerson!, selectedMovieIndex + 1, 2, 1);
 
                     MovieVieww.NavigationService.Navigate(watchMovieView);
                 },
