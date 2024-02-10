@@ -431,15 +431,15 @@
                 </Canvas>
                 <Grid Grid.Row="1" Background="Black">
                     <Grid>
-                        <!--<Grid.Background>
-                            <ImageBrush ImageSource="{Binding SelectedMovie.image}" Stretch="UniformToFill" />
-                        </Grid.Background>-->
+                        <Grid.Background>
+                            <ImageBrush ImageSource="{Binding SelectedMovie.Image}" Stretch="UniformToFill" />
+                        </Grid.Background>
                         <Grid VerticalAlignment="Center" Width="360" Height="380" HorizontalAlignment="Left" Margin="25 0">
                             <Rectangle Width="350" Height="380" Fill="Black" Opacity="0.8"/>
                             <StackPanel>
-                                <!--<TextBlock                        
+                                <TextBlock                        
                                     FontSize="25"
-                                    Text="{Binding SelectedMovie.title}"
+                                    Text="{Binding SelectedMovie.Name}"
                                     TextAlignment="Justify"
                                     Width="260"
                                     Height="120"
@@ -448,13 +448,13 @@
                                     Foreground="White"
                                     FontWeight="DemiBold"
                                     HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"/>-->
+                                    VerticalAlignment="Top"/>
 
                                 <StackPanel Orientation="Horizontal">
                                     <Label Content="IMDB" Foreground="White" FontWeight="Bold" Margin="40 2 0 5"/>
-                                    <!--<TextBlock                        
+                                    <TextBlock                        
                                         FontSize="14"
-                                        Text="{Binding SelectedMovie.rating}"
+                                        Text="{Binding SelectedMovie.Rating}"
                                         Width="25"
                                         Height="25" 
                                         Margin="10 5"
@@ -462,11 +462,11 @@
                                         Foreground="Gold"
                                         FontWeight="DemiBold"
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Top"/>-->
+                                        VerticalAlignment="Top"/>
                                     <Label Content="YEAR" Foreground="White" FontWeight="Bold" Margin="40 2 0 5"/>
-                                    <!--<TextBlock                        
+                                    <TextBlock                        
                                         FontSize="14"
-                                        Text="{Binding SelectedMovie.year}"
+                                        Text="{Binding SelectedMovie.Year}"
                                         Width="45"
                                         Height="25"
                                         Margin="10 5"                                  
@@ -474,12 +474,12 @@
                                         Foreground="#FF18D63E"
                                         FontWeight="DemiBold"
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Top"/>-->
+                                        VerticalAlignment="Top"/>
                                 </StackPanel>
 
-                                <!--<TextBlock                        
+                                <TextBlock                        
                                     FontSize="11"
-                                    Text="{Binding SelectedMovie.description}"
+                                    Text="{Binding SelectedMovie.Description}"
                                     TextAlignment="Justify"
                                     Width="260"
                                     Height="120"
@@ -488,7 +488,7 @@
                                     Foreground="White"
                                     FontWeight="SemiBold"
                                     HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"/>-->
+                                    VerticalAlignment="Top"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Button 
                                         Background="White"
@@ -644,7 +644,7 @@
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Height="30" Margin="20 0">
-                                    <!--<ItemsControl ItemsSource="{Binding SelectedMovie.genre}">
+                                    <ItemsControl ItemsSource="{Binding SelectedMovie.Genre}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal" />
@@ -656,7 +656,7 @@
                                                     Foreground="White" Width="100" Height="20" Margin="0 5 7 5" Background="#FF191818"/>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
-                                    </ItemsControl>-->
+                                    </ItemsControl>
                                 </StackPanel>
                             </StackPanel>
                         </Grid>
@@ -666,7 +666,7 @@
 
                 <Grid Grid.Row="2">
                     <ScrollViewer Background="#FF353333">
-                        <!--<ItemsControl x:Name="icList" ItemsSource="{Binding Film_view}" Background="#FF0E0D0D" Margin="5 5 0 5">
+                        <ItemsControl x:Name="icList" ItemsSource="{Binding Film_view}" Background="#FF0E0D0D" Margin="5 5 0 5">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <UniformGrid Columns="4"/>
@@ -676,22 +676,22 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Vertical" Margin="0 30 10 0">
-                                        <Button x:Name="movieB"  Width="280" Height="210" Margin="10 -20 0 0" BorderThickness="2"
+                                        <Button x:Name="movieB"  Width="250" Height="210" Margin="10 -20 0 0" BorderThickness="2"
                                             BorderBrush="Black" Click="movieB_Click">
                                             <StackPanel Orientation="Horizontal" Margin="-20 -102 0 0">
-                                                <Label Content="{Binding rating}" Margin="7 0 0 0" HorizontalAlignment="Left" Foreground="White" />
+                                                <Label Content="{Binding Rating}" Margin="7 0 0 0" HorizontalAlignment="Left" Foreground="White" />
                                                 <materialDesign:PackIcon Kind="Star" Foreground="Yellow" Margin="0 6 0 0"/>
-                                                <Label Content="{Binding year}" HorizontalAlignment="Right" Margin="170 -65 0 0" Width="48" Height="35" BorderThickness="0" 
+                                                <Label Content="{Binding Year}" HorizontalAlignment="Right" Margin="150 -65 0 0" Width="48" Height="35" BorderThickness="0" 
                                                     Foreground="#FF18D63E"/>
                                             </StackPanel>
                                             <Button.Background>
-                                                <ImageBrush ImageSource="{Binding image}" Stretch="Uniform"/>
+                                                <ImageBrush ImageSource="{Binding Image}" Stretch="Uniform"/>
                                             </Button.Background>
                                             <Button.Triggers>
                                                 <EventTrigger RoutedEvent="MouseEnter">
                                                     <BeginStoryboard>
                                                         <Storyboard>
-                                                            <DoubleAnimation Storyboard.TargetProperty="Width" To="275" Duration="0:0:0.2"/>
+                                                            <DoubleAnimation Storyboard.TargetProperty="Width" To="245" Duration="0:0:0.2"/>
                                                             <DoubleAnimation Storyboard.TargetProperty="Height" To="205" Duration="0:0:0.2"/>
                                                         </Storyboard>
                                                     </BeginStoryboard>
@@ -699,21 +699,20 @@
                                                 <EventTrigger RoutedEvent="MouseLeave">
                                                     <BeginStoryboard>
                                                         <Storyboard>
-                                                            <DoubleAnimation Storyboard.TargetProperty="Width" To="280" Duration="0:0:0.2"/>
+                                                            <DoubleAnimation Storyboard.TargetProperty="Width" To="250" Duration="0:0:0.2"/>
                                                             <DoubleAnimation Storyboard.TargetProperty="Height" To="210" Duration="0:0:0.2"/>
                                                         </Storyboard>
                                                     </BeginStoryboard>
                                                 </EventTrigger>
                                             </Button.Triggers>
                                         </Button>
-
-                                        <TextBlock Text="{Binding title}" Foreground="White" FontWeight="Bold"
+                                        <TextBlock Text="{Binding Name}" Foreground="White" FontWeight="Bold"
                                             FontFamily="Netflix Sans" HorizontalAlignment="Center" Margin="0 5"
                                             TextWrapping="Wrap"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
-                        </ItemsControl>-->
+                        </ItemsControl>
                     </ScrollViewer>
                 </Grid>
             </Grid>

@@ -43,4 +43,14 @@ public partial class MovieView_ : Page
         ButtonOpenMenu.Visibility = Visibility.Visible;
         ButtonCloseMenu.Visibility = Visibility.Collapsed;
     }
+
+    private void movieB_Click(object sender, System.Windows.RoutedEventArgs e)
+    {
+        //if (sender is Button button && button.DataContext is Movie movie)
+        //{
+        //    int rank = movie.rank;
+        //    WatchMovieView watchMovieView = new(CurrentPerson, rank);
+        //    NavigationService?.Navigate(watchMovieView);
+        //}
+    }
 }

@@ -6,7 +6,7 @@ namespace NetflixApp_Wpf.DTOs;
 public abstract class BaseMovieDTO : NotificationService
 {
     private int _year;
-    private double _rating;
+    private decimal _rating;
     private string? _name;
     private string? _description;
     private string? _image;
@@ -16,8 +16,8 @@ public abstract class BaseMovieDTO : NotificationService
     private ObservableCollection<string>? _comment;
 
     public int Year { get => _year; set { _year = value; OnPropertyChanged(); } }
-    public double Rating { get => _rating; set { _rating = value; OnPropertyChanged(); } }
-    public string? Title { get => _name; set { _name = value; OnPropertyChanged(); } }
+    public decimal Rating { get => _rating; set { _rating = value; OnPropertyChanged(); } }
+    public string? Name { get => _name; set { _name = value; OnPropertyChanged(); } }
     public string? Description { get => _description; set { _description = value; OnPropertyChanged(); } }
     public string? Image { get => _image; set { _image = value; OnPropertyChanged(); } }
     public string? Imdb_link { get => _link; set { _link = value; OnPropertyChanged(); } }

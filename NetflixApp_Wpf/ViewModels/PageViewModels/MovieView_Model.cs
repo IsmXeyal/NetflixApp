@@ -1,8 +1,13 @@
-﻿using NetflixApp_Wpf.Command;
+﻿using Microsoft.EntityFrameworkCore;
+using NetflixApp_Wpf.Command;
+using NetflixApp_Wpf.DTOs;
 using NetflixApp_Wpf.Services;
 using NetflixApp_Wpf.Views.Pages;
+using NetflixAppDataAccessLayer.Contexts;
+using NetflixAppDataAccessLayer.Repositories.Concretes;
 using NetflixAppDomainLayer.Entities.Concretes;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -20,14 +25,14 @@ public class MovieView_Model : NotificationService
     public ICommand? PlayCommand { get; set; }
     public ICommand? TrailerCommand { get; set; }
     public ICommand? MinimizeAppCommand { get; set; }
-    public ICommand? WatchCommand { get; set; }
-    public ICommand? GoSeriesCommand { get; set; }
+    //public ICommand? WatchCommand { get; set; }
+    //public ICommand? GoSeriesCommand { get; set; }
     public ICommand? PersonItemCommand { get; set; }
-    public ICommand? GoNewCommand { get; set; }
-    public ICommand? AddListCommand { get; set; }
-    public ICommand? GoListCommand { get; set; }
-    public ICommand? HeartCommand { get; set; }
-    public ICommand? SearchCommand { get; set; }
+    //public ICommand? GoNewCommand { get; set; }
+    //public ICommand? AddListCommand { get; set; }
+    //public ICommand? GoListCommand { get; set; }
+    //public ICommand? HeartCommand { get; set; }
+    //public ICommand? SearchCommand { get; set; }
 
     public int countClickMaximize = 0;
 
@@ -38,28 +43,30 @@ public class MovieView_Model : NotificationService
         set { _currentPerson = value; OnPropertyChanged(); }
     }
 
-    //private Movie? _selectedMovie;
+    private EditorChoiceDTO? _selectedMovie;
 
-    //public Movie? SelectedMovie
-    //{
-    //    get { return _selectedMovie; }
-    //    set { _selectedMovie = value; OnPropertyChanged(); }
-    //}
+    public EditorChoiceDTO? SelectedMovie
+    {
+        get { return _selectedMovie; }
+        set { _selectedMovie = value; OnPropertyChanged(); }
+    }
 
-    //private ObservableCollection<Movie>? film_view;
+    private ObservableCollection<EditorChoiceDTO>? film_view;
 
-    //public ObservableCollection<Movie>? Film_view
-    //{
-    //    get { return film_view; }
-    //    set { film_view = value; OnPropertyChanged(); }
-    //}
+    public ObservableCollection<EditorChoiceDTO>? Film_view
+    {
+        get { return film_view; }
+        set { film_view = value; OnPropertyChanged(); }
+    }
 
     private int selectedMovieIndex = 0;
     private DispatcherTimer? timer;
-
     public MovieView_Model(MovieView_ movieView, Person currentPerson, int ranking)
     {
         var window = Application.Current.MainWindow;
+        timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(6) };
+        timer.Tick += Timer_Tick;
+        timer.Start();
 
         MovieVieww = movieView;
         CurrentPerson = currentPerson;
@@ -181,9 +188,25 @@ public class MovieView_Model : NotificationService
         //        },
         //        pre => SelectedMovie != null);
 
-        //db.LoadMovies();
-        //Film_view = db.Movies;
-        //UpdateSelectedMovie();
+        EditorChoiceRepository editorChoice = new();
+        ICollection<EditorChoice> selection = editorChoice!.GetAllWithLanguages()!;
+        ICollection<EditorChoice> genresel = editorChoice!.GetAllWithGenres()!;
+
+        IEnumerable<EditorChoiceDTO> dtoList = selection.Where(ec => ec.Languages.Any(l => l.Id == 1)).Select(ec => new EditorChoiceDTO
+        {
+            Name = ec.Name,
+            Image = ec.Image_link,
+            Imdb_link = ec.Imdb_link,
+            Video_link = ec.Video_link,
+            Rank = ec.Rank,
+            Description = ec.Plot,
+            Year = ec.Year,
+            Rating = ec.Imdb_rating,
+            Genre = new ObservableCollection<string>(collection: ec.Genres!.Select(g => g.Name!))
+        });
+
+        Film_view = new ObservableCollection<EditorChoiceDTO>(dtoList);
+        UpdateSelectedMovie();
     }
 
     private void Timer_Tick(object sender, EventArgs e)
@@ -194,8 +217,9 @@ public class MovieView_Model : NotificationService
 
     private void UpdateSelectedMovie()
     {
-        //SelectedMovie = Film_view?.Count > selectedMovieIndex ? Film_view[selectedMovieIndex] : null;
+        SelectedMovie = Film_view?.Count > selectedMovieIndex ? Film_view[selectedMovieIndex] : null;
     }
+
 
     Notifier notifier = new(cfg =>
     {

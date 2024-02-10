@@ -69,7 +69,7 @@ public class SignInPageViewModel : NotificationService
                         {
                             timer.Stop();
 
-                            MovieView_ movieView_ = new(CurrentPerson, 0);
+                            MovieView_ movieView_ = new(CurrentPerson!, 0);
                             SignInPageView?.NavigationService.Navigate(movieView_);
                         };
                     }
