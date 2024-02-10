@@ -1,4 +1,5 @@
 ﻿using NetflixApp_Wpf.ViewModels.WindowViewModels;
+using NetflixApp_Wpf.Views.Pages;
 using NetflixApp_Wpf.Views.Windows;
 using System.Windows;
 

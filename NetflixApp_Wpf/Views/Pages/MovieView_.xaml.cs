@@ -15,6 +15,8 @@ public partial class MovieView_ : Page
         InitializeComponent();
         Loaded += MovieView_Loaded;
         CurrentPerson = currentPerson;
+        this.PersonItem.Margin = new Thickness(0, -100, 0, 0);
+        this.SettingItem.Margin = new Thickness(0, -20, 0, 0);
         DataContext = new MovieView_Model(this, currentPerson, ranking);
     }
 

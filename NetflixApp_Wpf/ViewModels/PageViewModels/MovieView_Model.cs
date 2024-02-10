@@ -1,13 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NetflixApp_Wpf.Command;
+﻿using NetflixApp_Wpf.Command;
 using NetflixApp_Wpf.DTOs;
 using NetflixApp_Wpf.Services;
 using NetflixApp_Wpf.Views.Pages;
-using NetflixAppDataAccessLayer.Contexts;
 using NetflixAppDataAccessLayer.Repositories.Concretes;
 using NetflixAppDomainLayer.Entities.Concretes;
 using System.Collections.ObjectModel;
-using System.Linq;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -28,11 +26,14 @@ public class MovieView_Model : NotificationService
     //public ICommand? WatchCommand { get; set; }
     //public ICommand? GoSeriesCommand { get; set; }
     public ICommand? PersonItemCommand { get; set; }
+    public ICommand? SettingItemCommand { get; set; }
+    public ICommand? NewPopularItemCommand { get; set; }
+    public ICommand? SignOutCommand { get; set; }
     //public ICommand? GoNewCommand { get; set; }
     //public ICommand? AddListCommand { get; set; }
     //public ICommand? GoListCommand { get; set; }
-    //public ICommand? HeartCommand { get; set; }
-    //public ICommand? SearchCommand { get; set; }
+    public ICommand? ChangeCommand { get; set; }
+    public ICommand? SearchCommand { get; set; }
 
     public int countClickMaximize = 0;
 
@@ -59,8 +60,29 @@ public class MovieView_Model : NotificationService
         set { film_view = value; OnPropertyChanged(); }
     }
 
+    private bool _ischeck;
+
+    public bool? Ischeck
+    {
+        get { return _ischeck; }
+        set { _ischeck = (bool)value!; OnPropertyChanged(); }
+    }
+
+    private string? _myLangSource;
+    public string? MyLangSource
+    {
+        get { return _myLangSource; }
+        set
+        {
+            _myLangSource = value;
+            OnPropertyChanged();
+        }
+    }
+
     private int selectedMovieIndex = 0;
     private DispatcherTimer? timer;
+    private int num;
+    public string? filePath = "../../../DTOs/CurrentPersonEmail.txt";
     public MovieView_Model(MovieView_ movieView, Person currentPerson, int ranking)
     {
         var window = Application.Current.MainWindow;
@@ -68,13 +90,28 @@ public class MovieView_Model : NotificationService
         timer.Tick += Timer_Tick;
         timer.Start();
 
+        Ischeck = false;
+        num = 1;
+        MyLangSource = "../../../StaticFiles/Images/usa.jpg";
+        UpdateFilmView();
         MovieVieww = movieView;
         CurrentPerson = currentPerson;
 
         MovieVieww.btn_max.IsEnabled = false;
 
         ExitAppCommand = new RelayCommand(
-                action => { Application.Current.Shutdown(); },
+                action => 
+                {
+                    try
+                    {
+                        File.WriteAllText(filePath, currentPerson.Email);
+                        Application.Current.Shutdown();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error writing to file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
+                },
                 pre => true);
 
         MinimizeAppCommand = new RelayCommand(
@@ -98,11 +135,57 @@ public class MovieView_Model : NotificationService
         //        },
         //        pre => true);
 
+        SettingItemCommand = new RelayCommand(
+                action =>
+                {
+                    if (movieView.SignoutItem.Visibility == Visibility.Visible)
+                        movieView.SignoutItem.Visibility = Visibility.Hidden;
+                    else
+                        movieView.SignoutItem.Visibility = Visibility.Visible;
+                },
+                pre => true);
+
         PersonItemCommand = new RelayCommand(
                 action =>
                 {
                     PersonInfoPageView personInfo = new(currentPerson);
                     MovieVieww.NavigationService.Navigate(personInfo);
+                },
+                pre => true);
+
+        NewPopularItemCommand = new RelayCommand(
+                action =>
+                {
+                    if (movieView.PopularMoviesItem.Visibility == Visibility.Visible && movieView.PopularTvShowsItem.Visibility == Visibility.Visible)
+                    {
+                        movieView.PopularMoviesItem.Visibility = Visibility.Hidden;
+                        movieView.PersonItem.Margin = new Thickness(0, -100, 0, 0);
+                        movieView.PopularTvShowsItem.Visibility = Visibility.Hidden;
+                        movieView.SettingItem.Margin = new Thickness(0, -20, 0, 0);
+                    }
+                    else
+                    {
+                        movieView.PopularMoviesItem.Visibility = Visibility.Visible;
+                        movieView.PersonItem.Margin = new Thickness(0, 0, 0, 0);
+                        movieView.PopularTvShowsItem.Visibility = Visibility.Visible;
+                    }
+                },
+                pre => true);
+
+        SignOutCommand = new RelayCommand(
+                action =>
+                {
+                    ClearPersonData();
+                    notifier.ShowSuccess("Signing Out...");
+                    DispatcherTimer timer = new();
+                    timer.Interval = TimeSpan.FromSeconds(3);
+                    timer.Tick += (sender, e) =>
+                    {
+                        timer.Stop();
+                        var signInPage = new SignInPageView();
+                        MovieVieww?.NavigationService?.Navigate(signInPage);
+                    };
+                    timer.Start();
                 },
                 pre => true);
 
@@ -138,24 +221,47 @@ public class MovieView_Model : NotificationService
         //        },
         //        pre => true);
 
-        //SearchCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            var searchText = MovieVieww?.tbSearch?.Text?.Trim();
-        //            if (!string.IsNullOrEmpty(searchText))
-        //            {
-        //                // When you use (StringComparison.OrdinalIgnoreCase) in string operations, it means that the comparison
-        //                // will ignore the case of the characters
-        //                var searchResults = db.Movies.Where(movie => movie.title.Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToList();
-        //                Film_view = new ObservableCollection<Movie>(searchResults);
-        //            }
-        //            else
-        //            {
-        //                notifier.ShowWarning("This movie doesn't exist in Netflix.");
-        //                Film_view = db.Movies;
-        //            }
-        //        },
-        //        pre => true);
+        ChangeCommand = new RelayCommand(
+                action =>
+                {
+                    if (Ischeck == false)
+                    {
+                        MyLangSource = "../../../StaticFiles/Images/usa.jpg";
+                        num = 1;
+                        movieView.imdb.Content = "IMDB";
+                        movieView.year.Content = "YEAR";
+                        movieView.mySearch.Text = "Search";
+                    }
+                    else
+                    {
+                        MyLangSource = "../../../StaticFiles/Images/russia-flag.jpg";
+                        num = 2;
+                        movieView.imdb.Content = "ИМДБ";
+                        movieView.year.Content = "Год";
+                        movieView.mySearch.Text = "Поиск";
+                    }
+                    UpdateFilmView();
+                },
+                pre => true);
+
+        SearchCommand = new RelayCommand(
+                action =>
+                {
+                    var searchText = MovieVieww?.tbSearch?.Text?.Trim();
+                    if (!string.IsNullOrEmpty(searchText))
+                    {
+                        // When you use (StringComparison.OrdinalIgnoreCase) in string operations, it means that the comparison
+                        // will ignore the case of the characters
+                        var searchResults = Film_view?.Where(movie => movie!.Name!.Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToList();
+                        Film_view = new ObservableCollection<EditorChoiceDTO>(searchResults!);
+                    }
+                    else
+                    {
+                        notifier.ShowWarning("This movie doesn't exist in Netflix.");
+                        UpdateFilmView();
+                    }
+                },
+                pre => true);
 
         //AddListCommand = new RelayCommand(
         //        action =>
@@ -188,22 +294,26 @@ public class MovieView_Model : NotificationService
         //        },
         //        pre => SelectedMovie != null);
 
+    }
+
+    private void UpdateFilmView()
+    {
         EditorChoiceRepository editorChoice = new();
         ICollection<EditorChoice> selection = editorChoice!.GetAllWithLanguages()!;
-        ICollection<EditorChoice> genresel = editorChoice!.GetAllWithGenres()!;
-
-        IEnumerable<EditorChoiceDTO> dtoList = selection.Where(ec => ec.Languages.Any(l => l.Id == 1)).Select(ec => new EditorChoiceDTO
-        {
-            Name = ec.Name,
-            Image = ec.Image_link,
-            Imdb_link = ec.Imdb_link,
-            Video_link = ec.Video_link,
-            Rank = ec.Rank,
-            Description = ec.Plot,
-            Year = ec.Year,
-            Rating = ec.Imdb_rating,
-            Genre = new ObservableCollection<string>(collection: ec.Genres!.Select(g => g.Name!))
-        });
+        IEnumerable<EditorChoiceDTO> dtoList = selection
+            .Where(ec => ec.Languages!.Any(l => l.Id == num))
+            .Select(ec => new EditorChoiceDTO
+            {
+                Name = ec.Name,
+                Image = ec.Image_link,
+                Imdb_link = ec.Imdb_link,
+                Video_link = ec.Video_link,
+                Rank = ec.Rank,
+                Description = ec.Plot,
+                Year = ec.Year,
+                Rating = ec.Imdb_rating,
+                Genre = new ObservableCollection<string>(collection: ec.Genres!.Select(g => g.Name!))
+            });
 
         Film_view = new ObservableCollection<EditorChoiceDTO>(dtoList);
         UpdateSelectedMovie();
@@ -218,6 +328,19 @@ public class MovieView_Model : NotificationService
     private void UpdateSelectedMovie()
     {
         SelectedMovie = Film_view?.Count > selectedMovieIndex ? Film_view[selectedMovieIndex] : null;
+    }
+
+    private void ClearPersonData()
+    {
+        try
+        {
+            if (File.Exists(filePath))
+                File.Delete(filePath);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error clearing user data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
 

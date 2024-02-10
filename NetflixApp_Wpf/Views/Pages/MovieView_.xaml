@@ -154,7 +154,8 @@
                         <TextBlock Text="TV Shows" Margin="10" VerticalAlignment="Center" Foreground="White"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="NewPopularItem" Height="60" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" Command="{Binding NewPopularItemCommand}">
+                <Button x:Name="NewPopularItem" Height="60" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" 
+                        Command="{Binding NewPopularItemCommand}">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -168,7 +169,38 @@
                         <TextBlock Text="New / Popular" Margin="10" VerticalAlignment="Center" Foreground="White"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="PersonItem" Height="60" RenderTransformOrigin="0.5 0.5" Background="Transparent" BorderBrush="Transparent" Command="{Binding PersonItemCommand}">
+                <Button x:Name="PopularMoviesItem" Height="40" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" 
+                        Command="{Binding PopularMoviesCommand}" Visibility="Hidden">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                    <StackPanel Orientation="Horizontal" Width="120" Margin="0 0 50 0">
+                        <materialDesign:PackIcon Kind="MovieStar" Width="25" Height="25" VerticalAlignment="Center" Margin="30 5 5 5" Foreground="White"/>
+                        <TextBlock Text="Movies" Height="25"  Margin="0 8 0 0" VerticalAlignment="Center" Foreground="White" FontSize="12"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="PopularTvShowsItem" Height="40" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" 
+                        Command="{Binding PopularTvShowsCommand}" Visibility="Hidden">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                    <StackPanel Orientation="Horizontal" Width="120" Margin="0 0 50 0">
+                        <materialDesign:PackIcon Kind="YoutubeTv" Width="25" Height="25" VerticalAlignment="Center" Margin="30 5 5 5" Foreground="White"/>
+                        <TextBlock Text="TV Shows"  Height="25"  Margin="0 8 0 0" VerticalAlignment="Center" Foreground="White" FontSize="12"/>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="PersonItem" Height="60" RenderTransformOrigin="0.5 0.5" Background="Transparent" BorderBrush="Transparent" 
+                        Command="{Binding PersonItemCommand}">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -182,7 +214,8 @@
                         <TextBlock Text="Personal Info" Margin="10" VerticalAlignment="Center" Foreground="White"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="SettingItem" Height="60" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" Command="{Binding SettingItemCommand}">
+                <Button x:Name="SettingItem" Height="60" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" 
+                        Command="{Binding SettingItemCommand}">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -194,6 +227,22 @@
                     <StackPanel Orientation="Horizontal" Width="110" Margin="0 0 80 0">
                         <materialDesign:PackIcon Kind="Settings" Width="30" Height="30" VerticalAlignment="Center" Margin="5" Foreground="White"/>
                         <TextBlock Text="Settings" Margin="10" VerticalAlignment="Center" Foreground="White"/>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="SignoutItem" Height="40" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" 
+                        Command="{Binding SignOutCommand}" Visibility="Hidden">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                    <StackPanel Orientation="Horizontal" Width="180" Margin="0 0 40 0">
+                        <materialDesign:PackIcon Kind="SignOut" Width="30" Height="30" VerticalAlignment="Center" Margin="30 5 5 5" Foreground="White"/>
+                        <TextBlock Text="Sign Out" Height="25"  Margin="0 5 0 0" VerticalAlignment="Center" Foreground="White" FontSize="12"/>
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -335,7 +384,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Source="..\..\StaticFiles\Images\netfl.jpg" Height="80" Width="150" Margin="20 -40 10 0"/>
 
-                        <TextBox x:Name="tbSearch" Width="300" Height="40" Margin="410 5 5 0" Background="#FF2D2B2B"
+                        <TextBox x:Name="tbSearch" Width="300" Height="40" Margin="360 5 5 0" Background="#FF2D2B2B"
                             Padding="10 0 40 5"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                             Foreground="White"
@@ -346,7 +395,7 @@
                             materialDesign:TextFieldAssist.TextFieldCornerRadius="12"
                             CaretBrush="White">
                             <materialDesign:HintAssist.Hint>
-                                <TextBlock Text="Search" Margin="5 -3 0 0" VerticalAlignment="Center" Foreground="White"/>
+                                <TextBlock x:Name="mySearch" Text="Search" Margin="5 -3 0 0" VerticalAlignment="Center" Foreground="White"/>
                             </materialDesign:HintAssist.Hint>
                         </TextBox>
                         <Button Background="#FF2D2B2B" BorderThickness="0"
@@ -424,8 +473,14 @@
                             </Button.Triggers>
                         </Button>
 
+                        <ToggleButton x:Name="chng_language" Margin="10 10 0 0" Width="40"
+                            Style="{StaticResource MaterialDesignSwitchDarkToggleButton}"
+                            ToolTip="Change language" materialDesign:ToggleButtonAssist.SwitchTrackOffBackground="White"
+                            materialDesign:ToggleButtonAssist.SwitchTrackOnBackground="White" Background="#FFF11919"
+                            Command="{Binding ChangeCommand}"
+                            IsChecked="{Binding Ischeck, Mode=TwoWay}"/>
                         <Border Width="50" Height="40" Margin="15 5 0 0" x:Name="ImageBorder" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                            <Image Source="..\..\StaticFiles\Images\avatar.jpg"/>
+                            <Image x:Name="myLang" Source="{Binding MyLangSource}"/>
                         </Border>
                     </StackPanel>
                 </Canvas>
@@ -451,8 +506,8 @@
                                     VerticalAlignment="Top"/>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <Label Content="IMDB" Foreground="White" FontWeight="Bold" Margin="40 2 0 5"/>
-                                    <TextBlock                        
+                                    <Label x:Name="imdb" Content="IMDB" Foreground="White" FontWeight="Bold" Margin="40 2 0 5"/>
+                                    <TextBlock                       
                                         FontSize="14"
                                         Text="{Binding SelectedMovie.Rating}"
                                         Width="25"
@@ -463,7 +518,7 @@
                                         FontWeight="DemiBold"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"/>
-                                    <Label Content="YEAR" Foreground="White" FontWeight="Bold" Margin="40 2 0 5"/>
+                                    <Label x:Name="year" Content="YEAR" Foreground="White" FontWeight="Bold" Margin="40 2 0 5"/>
                                     <TextBlock                        
                                         FontSize="14"
                                         Text="{Binding SelectedMovie.Year}"

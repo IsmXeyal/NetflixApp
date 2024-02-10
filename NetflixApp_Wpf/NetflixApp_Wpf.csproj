@@ -17,6 +17,8 @@
     <None Remove="StaticFiles\Images\n3.jpg" />
     <None Remove="StaticFiles\Images\netf.jpg" />
     <None Remove="StaticFiles\Images\netfl.jpg" />
+    <None Remove="StaticFiles\Images\russia-flag.jpg" />
+    <None Remove="StaticFiles\Images\usa.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,6 +59,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
     <Resource Include="StaticFiles\Images\netfl.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StaticFiles\Images\russia-flag.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="StaticFiles\Images\usa.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
