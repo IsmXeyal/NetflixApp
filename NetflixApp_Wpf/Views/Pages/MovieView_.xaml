@@ -112,7 +112,8 @@
                 </Border>
             </StackPanel>
             <StackPanel x:Name="StackPanelMain" Margin="0 10">
-                <Button x:Name="EditorItem" Height="60" RenderTransformOrigin="0.5 0.5" Background="Transparent" BorderBrush="Transparent" Command="{Binding EditorItemCommand}">
+                <Button x:Name="EditorItem" Height="60" RenderTransformOrigin="0.5 0.5" Background="Transparent" BorderBrush="Transparent" 
+                        Command="{Binding EditorItemCommand}">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -126,7 +127,8 @@
                         <TextBlock Text="Home" Margin="10" VerticalAlignment="Center" Foreground="White" />
                     </StackPanel>
                 </Button>
-                <Button x:Name="MoviesItem" Height="60" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" Command="{Binding MoviesItemCommand}">
+                <Button x:Name="MoviesItem" Height="60" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" 
+                        Command="{Binding MoviesItemCommand}">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -140,7 +142,8 @@
                         <TextBlock Text="Movies" Margin="10" VerticalAlignment="Center" Foreground="White"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="TvShowsItem" Height="60" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" Command="{Binding TvShowsItemCommand}">
+                <Button x:Name="TvShowsItem" Height="60" RenderTransformOrigin="0.5,0.5" Background="Transparent" BorderBrush="Transparent" 
+                        Command="{Binding TvShowsItemCommand}">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -495,10 +498,10 @@
                                 <TextBlock                        
                                     FontSize="25"
                                     Text="{Binding SelectedMovie.Name}"
-                                    TextAlignment="Justify"
+                                    TextAlignment="Center"
                                     Width="260"
-                                    Height="120"
-                                    Margin="20 5 0 10"
+                                    Height="120" Padding="0 20 0 0"
+                                    Margin="50 5 0 10"
                                     TextWrapping="Wrap"
                                     Foreground="White"
                                     FontWeight="DemiBold"
@@ -506,7 +509,7 @@
                                     VerticalAlignment="Top"/>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <Label x:Name="imdb" Content="IMDB" Foreground="White" FontWeight="Bold" Margin="40 2 0 5"/>
+                                    <Label x:Name="imdb" Content="IMDB" Foreground="White" FontWeight="Bold" Margin="60 2 0 5"/>
                                     <TextBlock                       
                                         FontSize="14"
                                         Text="{Binding SelectedMovie.Rating}"
@@ -518,7 +521,7 @@
                                         FontWeight="DemiBold"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"/>
-                                    <Label x:Name="year" Content="YEAR" Foreground="White" FontWeight="Bold" Margin="40 2 0 5"/>
+                                    <Label x:Name="year" Content="YEAR" Foreground="White" FontWeight="Bold" Margin="60 2 0 5"/>
                                     <TextBlock                        
                                         FontSize="14"
                                         Text="{Binding SelectedMovie.Year}"

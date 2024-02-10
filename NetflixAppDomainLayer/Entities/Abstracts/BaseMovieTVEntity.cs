@@ -2,5 +2,6 @@
 
 public abstract class BaseMovieTVEntity : BaseMovieEntity
 {
+    public string? Year { get; set; }
     public string? Duration { get; set; }
 }

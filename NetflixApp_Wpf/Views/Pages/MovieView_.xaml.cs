@@ -1,4 +1,5 @@
-﻿using NetflixApp_Wpf.ViewModels.PageViewModels;
+﻿using NetflixApp_Wpf.DTOs;
+using NetflixApp_Wpf.ViewModels.PageViewModels;
 using NetflixAppDomainLayer.Entities.Concretes;
 using System.Windows;
 using System.Windows.Controls;
@@ -48,11 +49,17 @@ public partial class MovieView_ : Page
 
     private void movieB_Click(object sender, System.Windows.RoutedEventArgs e)
     {
-        //if (sender is Button button && button.DataContext is Movie movie)
-        //{
-        //    int rank = movie.rank;
-        //    WatchMovieView watchMovieView = new(CurrentPerson, rank);
-        //    NavigationService?.Navigate(watchMovieView);
-        //}
+        if (sender is Button button && button.DataContext is EditorChoiceDTO movie)
+        {
+            int rank = movie.Rank;
+            WatchMovieView watchMovieView;
+
+            if (this.chng_language.IsChecked == false)
+                watchMovieView = new WatchMovieView(CurrentPerson!, rank, 1);
+            else
+                watchMovieView = new WatchMovieView(CurrentPerson!, rank, 2);
+
+            NavigationService?.Navigate(watchMovieView);
+        }
     }
 }

@@ -23,13 +23,15 @@ public class MovieView_Model : NotificationService
     public ICommand? PlayCommand { get; set; }
     public ICommand? TrailerCommand { get; set; }
     public ICommand? MinimizeAppCommand { get; set; }
-    //public ICommand? WatchCommand { get; set; }
-    //public ICommand? GoSeriesCommand { get; set; }
     public ICommand? PersonItemCommand { get; set; }
     public ICommand? SettingItemCommand { get; set; }
     public ICommand? NewPopularItemCommand { get; set; }
     public ICommand? SignOutCommand { get; set; }
-    //public ICommand? GoNewCommand { get; set; }
+    public ICommand? EditorItemCommand { get; set; }
+    public ICommand? MoviesItemCommand { get; set; }
+    public ICommand? TvShowsItemCommand { get; set; }
+    public ICommand? PopularMoviesCommand { get; set; }
+    public ICommand? PopularTvShowsCommand { get; set; }
     //public ICommand? AddListCommand { get; set; }
     //public ICommand? GoListCommand { get; set; }
     public ICommand? ChangeCommand { get; set; }
@@ -119,21 +121,33 @@ public class MovieView_Model : NotificationService
                 pre => true
                 );
 
-        //TrailerCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            WatchMovieView watch = new(currentPerson, selectedMovieIndex + 1);
-        //            MovieVieww.NavigationService.Navigate(watch);
-        //        },
-        //        pre => true);
+        TrailerCommand = new RelayCommand(
+                action =>
+                {
+                    WatchMovieView watchMovieView;
 
-        //PlayCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            WatchMovieView watch = new(currentPerson, selectedMovieIndex + 1);
-        //            MovieVieww.NavigationService.Navigate(watch);
-        //        },
-        //        pre => true);
+                    if (movieView.chng_language.IsChecked == false)
+                        watchMovieView = new WatchMovieView(CurrentPerson!, selectedMovieIndex + 1, 1);
+                    else
+                        watchMovieView = new WatchMovieView(CurrentPerson!, selectedMovieIndex + 1, 2);
+
+                    MovieVieww.NavigationService.Navigate(watchMovieView);
+                },
+                pre => true);
+
+        PlayCommand = new RelayCommand(
+                action =>
+                {
+                    WatchMovieView watchMovieView;
+
+                    if (movieView.chng_language.IsChecked == false)
+                        watchMovieView = new WatchMovieView(CurrentPerson!, selectedMovieIndex + 1, 1);
+                    else
+                        watchMovieView = new WatchMovieView(CurrentPerson!, selectedMovieIndex + 1, 2);
+
+                    MovieVieww.NavigationService.Navigate(watchMovieView);
+                },
+                pre => true);
 
         SettingItemCommand = new RelayCommand(
                 action =>
@@ -150,6 +164,14 @@ public class MovieView_Model : NotificationService
                 {
                     PersonInfoPageView personInfo = new(currentPerson);
                     MovieVieww.NavigationService.Navigate(personInfo);
+                },
+                pre => true);
+
+        EditorItemCommand = new RelayCommand(
+                action =>
+                {
+                    var movieView = new MovieView_(currentPerson!, 0);
+                    MovieVieww?.NavigationService?.Navigate(movieView);
                 },
                 pre => true);
 
@@ -189,21 +211,37 @@ public class MovieView_Model : NotificationService
                 },
                 pre => true);
 
-        //GoSeriesCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            TvShowsPageView tvShows = new(currentPerson, "TvShow");
-        //            MovieVieww.NavigationService.Navigate(tvShows);
-        //        },
-        //        pre => true);
+        MoviesItemCommand = new RelayCommand(
+                action =>
+                {
+                    TvShowsPageView tvShows = new(currentPerson, "Top250Movie");
+                    MovieVieww.NavigationService.Navigate(tvShows);
+                },
+                pre => true);
 
-        //GoNewCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            TvShowsPageView tvShows = new(currentPerson, "NewMovie");
-        //            MovieVieww.NavigationService.Navigate(tvShows);
-        //        },
-        //        pre => true);
+        TvShowsItemCommand = new RelayCommand(
+                action =>
+                {
+                    TvShowsPageView tvShows = new(currentPerson, "Top250TvShow");
+                    MovieVieww.NavigationService.Navigate(tvShows);
+                },
+                pre => true);
+
+        PopularMoviesCommand = new RelayCommand(
+                action =>
+                {
+                    TvShowsPageView tvShows = new(currentPerson, "Popularmovies");
+                    MovieVieww.NavigationService.Navigate(tvShows);
+                },
+                pre => true);
+
+        PopularTvShowsCommand = new RelayCommand(
+                action =>
+                {
+                    TvShowsPageView tvShows = new(currentPerson, "PopularTvShow");
+                    MovieVieww.NavigationService.Navigate(tvShows);
+                },
+                pre => true);
 
         //GoListCommand = new RelayCommand(
         //        action =>
@@ -224,21 +262,22 @@ public class MovieView_Model : NotificationService
         ChangeCommand = new RelayCommand(
                 action =>
                 {
-                    if (Ischeck == false)
+                    switch (Ischeck)
                     {
-                        MyLangSource = "../../../StaticFiles/Images/usa.jpg";
-                        num = 1;
-                        movieView.imdb.Content = "IMDB";
-                        movieView.year.Content = "YEAR";
-                        movieView.mySearch.Text = "Search";
-                    }
-                    else
-                    {
-                        MyLangSource = "../../../StaticFiles/Images/russia-flag.jpg";
-                        num = 2;
-                        movieView.imdb.Content = "ИМДБ";
-                        movieView.year.Content = "Год";
-                        movieView.mySearch.Text = "Поиск";
+                        case false:
+                            MyLangSource = "../../../StaticFiles/Images/usa.jpg";
+                            num = 1;
+                            movieView.imdb.Content = "IMDB";
+                            movieView.year.Content = "YEAR";
+                            movieView.mySearch.Text = "Search";
+                            break;
+                        case true:
+                            MyLangSource = "../../../StaticFiles/Images/russia-flag.jpg";
+                            num = 2;
+                            movieView.imdb.Content = "ИМДБ";
+                            movieView.year.Content = "Год";
+                            movieView.mySearch.Text = "Поиск";
+                            break;
                     }
                     UpdateFilmView();
                 },

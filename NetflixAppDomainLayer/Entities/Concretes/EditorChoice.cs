@@ -4,6 +4,7 @@ namespace NetflixAppDomainLayer.Entities.Concretes;
 
 public class EditorChoice : BaseMovieEntity
 {
+    public int Year { get; set; }
     public int Rank {  get; set; }
     public string? Video_link { get; set; }
 
