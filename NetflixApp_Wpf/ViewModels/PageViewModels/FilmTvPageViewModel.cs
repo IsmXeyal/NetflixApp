@@ -1,7 +1,7 @@
 ﻿using NetflixApp_Wpf.Command;
 using NetflixApp_Wpf.DTOs;
-using NetflixApp_Wpf.Services;
 using NetflixApp_Wpf.Views.Pages;
+using NetflixAppBusinessLogicLayer.Services;
 using NetflixAppDataAccessLayer.Contexts;
 using NetflixAppDataAccessLayer.Repositories.Concretes;
 using NetflixAppDomainLayer.Entities.Concretes;
@@ -61,8 +61,27 @@ public class FilmTvPageViewModel : NotificationService
         BackCommand = new RelayCommand(
                 action =>
                 {
-                    var movieView = new MovieView_(currentPerson!, 0);
-                    FilmList?.NavigationService?.Navigate(movieView);
+                    TvShowsPageView tvShowss;
+                    switch (GlobalStringCommand.Commaand)
+                    {
+                        case "Top250Movie":
+                            tvShowss = new TvShowsPageView(CurrentPerson!, "Top250Movie");
+                            break;
+                        case "Top250TvShow":
+                            tvShowss = new TvShowsPageView(CurrentPerson!, "Top250TvShow");
+                            break;
+                        case "Popularmovies":
+                            tvShowss = new TvShowsPageView(CurrentPerson!, "Popularmovies");
+                            break;
+                        case "PopularTvShow":
+                            tvShowss = new TvShowsPageView(CurrentPerson!, "PopularTvShow");
+                            break;
+                        default:
+                            var movieView = new MovieView_(currentPerson!, 0);
+                            FilmList?.NavigationService?.Navigate(movieView);
+                            return;
+                    }
+                    FilmList.NavigationService.Navigate(tvShowss);                    
                 },
                 pre => true);
 

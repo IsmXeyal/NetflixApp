@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace NetflixApp_Wpf.Services;
+namespace NetflixAppBusinessLogicLayer.Services;
 
 public abstract class NotificationService : INotifyPropertyChanged
 {

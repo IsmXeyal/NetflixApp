@@ -11,8 +11,8 @@ using System.Windows.Threading;
 using ToastNotifications.Messages;
 using NetflixApp_Wpf.Services.Validations;
 using NetflixAppDataAccessLayer.Contexts;
-using NetflixApp_Wpf.Services;
 using Microsoft.Win32;
+using NetflixAppBusinessLogicLayer.Services;
 
 namespace NetflixApp_Wpf.ViewModels.PageViewModels;
 

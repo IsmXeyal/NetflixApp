@@ -737,9 +737,9 @@
                                         <Button x:Name="movieB"  Width="250" Height="210" Margin="10 -20 0 0" BorderThickness="2"
                                             BorderBrush="Black" Click="movieB_Click">
                                             <StackPanel Orientation="Horizontal" Margin="-20 -102 0 0">
-                                                <Label Content="{Binding Rating}" Margin="7 0 0 0" HorizontalAlignment="Left" Foreground="White" />
+                                                <Label Content="{Binding Rating}" Margin="10 0 0 0" HorizontalAlignment="Left" Foreground="White" />
                                                 <materialDesign:PackIcon Kind="Star" Foreground="Yellow" Margin="0 6 0 0"/>
-                                                <Label Content="{Binding Year}" HorizontalAlignment="Right" Margin="150 -65 0 0" Width="48" Height="35" BorderThickness="0" 
+                                                <Label Content="{Binding Year}" HorizontalAlignment="Right" Margin="145 -65 0 0" Width="48" Height="35" BorderThickness="0" 
                                                     Foreground="#FF18D63E"/>
                                             </StackPanel>
                                             <Button.Background>

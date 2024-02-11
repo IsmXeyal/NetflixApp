@@ -1,11 +1,10 @@
 ﻿using NetflixApp_Wpf.Command;
 using NetflixApp_Wpf.DTOs;
-using NetflixApp_Wpf.Services;
 using NetflixApp_Wpf.Views.Pages;
+using NetflixAppBusinessLogicLayer.Services;
 using NetflixAppDataAccessLayer.Contexts;
 using NetflixAppDataAccessLayer.Repositories.Concretes;
 using NetflixAppDomainLayer.Entities.Concretes;
-using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;

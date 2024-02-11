@@ -1,6 +1,6 @@
 ﻿using NetflixApp_Wpf.Command;
-using NetflixApp_Wpf.Services;
 using NetflixApp_Wpf.Views.Pages;
+using NetflixAppBusinessLogicLayer.Services;
 using NetflixAppDataAccessLayer.Contexts;
 using NetflixAppDomainLayer.Entities.Concretes;
 using System.Text.RegularExpressions;

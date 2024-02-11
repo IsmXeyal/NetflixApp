@@ -1,6 +1,4 @@
-﻿using NetflixApp_Wpf.Services;
-
-namespace NetflixApp_Wpf.DTOs;
+﻿namespace NetflixApp_Wpf.DTOs;
 
 public class EditorChoiceDTO : BaseMovieDTO
 {

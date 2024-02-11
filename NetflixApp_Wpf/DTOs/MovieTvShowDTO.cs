@@ -1,7 +1,4 @@
-﻿using NetflixApp_Wpf.Services;
-using System.Collections.ObjectModel;
-
-namespace NetflixApp_Wpf.DTOs;
+﻿namespace NetflixApp_Wpf.DTOs;
 
 public class MovieTvShowDTO : BaseMovieDTO
 {

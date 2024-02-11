@@ -1,5 +1,4 @@
-﻿using Microsoft.Data.SqlClient;
-using NetflixApp_Wpf.Command;
+﻿using NetflixApp_Wpf.Command;
 using NetflixApp_Wpf.Services.Validations;
 using NetflixApp_Wpf.Views.Pages;
 using NetflixAppBusinessLogicLayer.Network;

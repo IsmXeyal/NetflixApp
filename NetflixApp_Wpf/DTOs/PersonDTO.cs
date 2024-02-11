@@ -1,4 +1,4 @@
-﻿using NetflixApp_Wpf.Services;
+﻿using NetflixAppBusinessLogicLayer.Services;
 using System.Collections.ObjectModel;
 
 namespace NetflixApp_Wpf.DTOs;
