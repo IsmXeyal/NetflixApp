@@ -2,6 +2,7 @@
 using NetflixApp_Wpf.DTOs;
 using NetflixApp_Wpf.Services;
 using NetflixApp_Wpf.Views.Pages;
+using NetflixAppDataAccessLayer.Contexts;
 using NetflixAppDataAccessLayer.Repositories.Concretes;
 using NetflixAppDomainLayer.Entities.Concretes;
 using System.Collections.ObjectModel;
@@ -15,6 +16,11 @@ using ToastNotifications.Messages;
 using ToastNotifications.Position;
 
 namespace NetflixApp_Wpf.ViewModels.PageViewModels;
+
+public static class GlobalVariables
+{
+    public static string? FilePath { get; } = "../../../DTOs/CurrentPersonEmail.txt";
+}
 
 public class MovieView_Model : NotificationService
 {
@@ -32,8 +38,9 @@ public class MovieView_Model : NotificationService
     public ICommand? TvShowsItemCommand { get; set; }
     public ICommand? PopularMoviesCommand { get; set; }
     public ICommand? PopularTvShowsCommand { get; set; }
-    //public ICommand? AddListCommand { get; set; }
-    //public ICommand? GoListCommand { get; set; }
+    public ICommand? AddListCommand { get; set; }
+    public ICommand? GoListCommand { get; set; }
+    public ICommand? HeartCommand { get; set; }
     public ICommand? ChangeCommand { get; set; }
     public ICommand? SearchCommand { get; set; }
 
@@ -84,7 +91,8 @@ public class MovieView_Model : NotificationService
     private int selectedMovieIndex = 0;
     private DispatcherTimer? timer;
     private int num;
-    public string? filePath = "../../../DTOs/CurrentPersonEmail.txt";
+
+    NetflixDbContext context = new(); 
     public MovieView_Model(MovieView_ movieView, Person currentPerson, int ranking)
     {
         var window = Application.Current.MainWindow;
@@ -106,7 +114,7 @@ public class MovieView_Model : NotificationService
                 {
                     try
                     {
-                        File.WriteAllText(filePath, currentPerson.Email);
+                        File.WriteAllText(GlobalVariables.FilePath!, currentPerson.Email);
                         Application.Current.Shutdown();
                     }
                     catch (Exception ex)
@@ -118,8 +126,7 @@ public class MovieView_Model : NotificationService
 
         MinimizeAppCommand = new RelayCommand(
                 action => { window.WindowState = WindowState.Minimized; },
-                pre => true
-                );
+                pre => true);
 
         TrailerCommand = new RelayCommand(
                 action =>
@@ -243,21 +250,21 @@ public class MovieView_Model : NotificationService
                 },
                 pre => true);
 
-        //GoListCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            FilmListPageView filmList = new(currentPerson, "GoList");
-        //            MovieVieww.NavigationService.Navigate(filmList);
-        //        },
-        //        pre => true);
+        GoListCommand = new RelayCommand(
+                action =>
+                {
+                    FilmListPageView filmList = new(currentPerson, "GoList", 1);
+                    MovieVieww.NavigationService.Navigate(filmList);
+                },
+                pre => true);
 
-        //HeartCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            FilmListPageView filmList = new(currentPerson, "Heart");
-        //            MovieVieww.NavigationService.Navigate(filmList);
-        //        },
-        //        pre => true);
+        HeartCommand = new RelayCommand(
+                action =>
+                {
+                    FilmListPageView filmList = new(currentPerson, "Heart", 1);
+                    MovieVieww.NavigationService.Navigate(filmList);
+                },
+                pre => true);
 
         ChangeCommand = new RelayCommand(
                 action =>
@@ -302,36 +309,32 @@ public class MovieView_Model : NotificationService
                 },
                 pre => true);
 
-        //AddListCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            var selectedPerson = db.loadedPeople.FirstOrDefault(person => person.Email == CurrentPerson?.Email);
+        AddListCommand = new RelayCommand(
+                action =>
+                {
+                    var selectedPerson = context.People.FirstOrDefault(person => person.Email == CurrentPerson!.Email);
 
-        //            if (selectedPerson != null)
-        //            {
-        //                if (selectedPerson.AddList.Any(u => u.title == SelectedMovie?.title))
-        //                {
-        //                    notifier.ShowWarning("This movie already added to the list.");
-        //                }
-        //                else
-        //                {
-        //                    // Determine the new rank based on the maximum rank in AddList or set to 1 if AddList is empty
-        //                    int lastRank = selectedPerson.AddList.Any() ? selectedPerson.AddList.Max(m => m.rank) : 0;
+                    if (selectedPerson != null)
+                    {
+                        if (selectedPerson.AddListECs!.Any(u => u.Id_ECMovie == SelectedMovie!.Rank))
+                        {
+                            notifier.ShowWarning("This movie is already added to the list.");
+                        }
+                        else
+                        {
+                            var addListEC = new AddListEC
+                            {
+                                Id_Person = selectedPerson.Id,
+                                Id_ECMovie = SelectedMovie!.Rank,
+                            };
 
-        //                    // Set the rank for the selectedMovie
-        //                    SelectedMovie.rank = lastRank + 1;
-
-        //                    // Add selectedMovie to the AddList of the selectedPerson
-        //                    selectedPerson.AddList.Add(SelectedMovie);
-
-        //                    // Save the updated AddList for the selectedPerson
-        //                    db.SavePeopleToJson();
-
-        //                    notifier.ShowSuccess("Movie added to the list!");
-        //                }
-        //            }
-        //        },
-        //        pre => SelectedMovie != null);
+                            context.AddListECs.Add(addListEC);
+                            context.SaveChanges();
+                            notifier.ShowSuccess("Movie added to the list!");
+                        }
+                    }
+                },
+                pre => SelectedMovie != null);
 
     }
 
@@ -373,8 +376,8 @@ public class MovieView_Model : NotificationService
     {
         try
         {
-            if (File.Exists(filePath))
-                File.Delete(filePath);
+            if (File.Exists(GlobalVariables.FilePath))
+                File.Delete(GlobalVariables.FilePath);
         }
         catch (Exception ex)
         {

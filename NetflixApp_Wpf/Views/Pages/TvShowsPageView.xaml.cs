@@ -1,7 +1,6 @@
 ﻿using NetflixApp_Wpf.DTOs;
 using NetflixApp_Wpf.ViewModels.PageViewModels;
 using NetflixAppDomainLayer.Entities.Concretes;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace NetflixApp_Wpf.Views.Pages;

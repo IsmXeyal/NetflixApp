@@ -2,6 +2,7 @@
 using NetflixApp_Wpf.DTOs;
 using NetflixApp_Wpf.Services;
 using NetflixApp_Wpf.Views.Pages;
+using NetflixAppDataAccessLayer.Contexts;
 using NetflixAppDataAccessLayer.Repositories.Concretes;
 using NetflixAppDomainLayer.Entities.Concretes;
 using System;
@@ -12,6 +13,7 @@ using System.Windows;
 using System.Windows.Input;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
+using ToastNotifications.Messages;
 using ToastNotifications.Position;
 
 namespace NetflixApp_Wpf.ViewModels.PageViewModels;
@@ -55,7 +57,7 @@ public class WatchMovieViewModel : NotificationService
         set { _isfavorite = (bool)value!; OnPropertyChanged(); }
     }
 
-    public string? filePath = "../../../DTOs/CurrentPersonEmail.txt";
+    NetflixDbContext context = new();
     public WatchMovieViewModel(WatchMovieView watchMovie, Person person, int index, int langId, int type)
     {
         WatchMovieVieww = watchMovie;
@@ -71,21 +73,21 @@ public class WatchMovieViewModel : NotificationService
             Imdb_Link = SelectedMovie.Imdb_link;
         }
 
-        //var selectedPerson = db.loadedPeople.FirstOrDefault(person => person.Email == CurrentPerson?.Email);
-        //if (selectedPerson != null)
-        //{
-        //    if (selectedPerson.FavsList!.Any(u => u.title == SelectedMovie?.Name))
-        //        IsFavorite = true;
-        //    else
-        //        IsFavorite = false;
-        //}
+        var selectedPerson = context.People.FirstOrDefault(person => person.Email == CurrentPerson!.Email);
+        if (selectedPerson != null)
+        {
+            if (selectedPerson.AddListECs!.FirstOrDefault(add => add.Id_ECMovie == SelectedMovie!.Rank && add.Id_Person == CurrentPerson.Id && add.IsFavorite == true) != null)
+                IsFavorite = true;
+            else
+                IsFavorite = false;
+        }
 
         ExitCommand = new RelayCommand(
                action =>
                {
                    try
                    {
-                       File.WriteAllText(filePath, person.Email);
+                       File.WriteAllText(GlobalVariables.FilePath!, person.Email);
                        Application.Current.Shutdown();
                    }
                    catch (Exception ex)
@@ -126,64 +128,73 @@ public class WatchMovieViewModel : NotificationService
                 },
                 pre => !string.IsNullOrEmpty(Video_Link));
 
-        //AddListCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            if (selectedPerson != null)
-        //            {
-        //                if (selectedPerson.AddList!.Any(u => u.title == selectedMovie?.title))
-        //                {
-        //                    notifier.ShowWarning("This movie already added to the list.");
-        //                }
-        //                else
-        //                {
-        //                     Determine the new rank based on the maximum rank in AddList or set to 1 if AddList is empty
-        //                    int lastRank = selectedPerson.AddList.Any() ? selectedPerson.AddList.Max(m => m.rank) : 0;
+        AddListCommand = new RelayCommand(
+                action =>
+                {
+                    if (selectedPerson != null)
+                    {
+                        if (selectedPerson.AddListECs!.Any(u => (u.Id_ECMovie == SelectedMovie!.Rank && u.IsBoth == false && u.IsFavorite == false)
+                            || (u.Id_ECMovie == SelectedMovie!.Rank && u.IsBoth == true)))
+                        {
+                            notifier.ShowWarning("This movie is already added to the list.");
+                        }
+                        else
+                        {
+                            var addListEC = new AddListEC
+                            {
+                                Id_Person = selectedPerson.Id,
+                                Id_ECMovie = SelectedMovie!.Rank,
+                            };
 
-        //                     Set the rank for the selectedMovie
-        //                    selectedMovie.rank = lastRank + 1;
+                            context.AddListECs.Add(addListEC);
+                            context.SaveChanges();
+                            notifier.ShowSuccess("Movie added to the list!");
+                        }
+                    }
+                },
+                pre => SelectedMovie != null);
 
-        //                     Add selectedMovie to the AddList of the selectedPerson
-        //                    selectedPerson.AddList.Add(selectedMovie);
+        HeartCommand = new RelayCommand(
+                action =>
+                {
+                    if (selectedPerson != null)
+                    {
+                        var addListEC = selectedPerson.AddListECs!.FirstOrDefault(add => add.Id_ECMovie == SelectedMovie!.Rank && add.Id_Person == CurrentPerson.Id);
 
-        //                     Save the updated AddList for the selectedPerson
-        //                    db.SavePeopleToJson();
+                        if (addListEC != null)
+                        {
+                            addListEC.IsFavorite = !addListEC.IsFavorite;
+                            if (addListEC.IsFavorite)
+                            {
+                                notifier.ShowSuccess("Movie marked as favorite!");
+                                addListEC.IsBoth = true;
+                            }
+                            else
+                            {
+                                if(addListEC.IsBoth == true)
+                                    addListEC.IsBoth = false;
+                                else
+                                    context.AddListECs.Remove(addListEC);
+                                notifier.ShowSuccess("Movie removed from favorites!");
+                            }
+                            context.SaveChanges();
+                        }
+                        else
+                        {
+                            addListEC = new AddListEC
+                            {
+                                Id_Person = selectedPerson.Id,
+                                Id_ECMovie = SelectedMovie!.Rank,
+                                IsFavorite = true
+                            };
 
-        //                    notifier.ShowSuccess("Movie added to the list!");
-        //                }
-        //            }
-        //        },
-        //        pre => selectedMovie != null);
-
-        //HeartCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            if (selectedPerson != null)
-        //            {
-        //                if (IsFavorite == false)
-        //                {
-        //                    Movie? movieToRemove = selectedPerson!.FavsList!.FirstOrDefault(m => m.title == selectedMovie?.title);
-        //                    int removedRank = movieToRemove.rank;
-        //                    selectedPerson!.FavsList!.Remove(movieToRemove);
-
-        //                    foreach (Movie movie in selectedPerson.FavsList.Where(m => m.rank > removedRank))
-        //                    {
-        //                        movie.rank--;
-        //                    }
-        //                    db.SavePeopleToJson();
-        //                    notifier.ShowSuccess("Movie removed from favorites!");
-        //                }
-        //                else
-        //                {
-        //                    int lastRank = selectedPerson.FavsList!.Any() ? selectedPerson.FavsList!.Max(m => m.rank) : 0;
-        //                    selectedMovie!.rank = lastRank + 1;
-        //                    selectedPerson.FavsList!.Add(selectedMovie);
-        //                    db.SavePeopleToJson();
-        //                    notifier.ShowSuccess("Movie added to favorites!");
-        //                }
-        //            }
-        //        },
-        //        pre => selectedMovie != null);
+                            context.AddListECs.Add(addListEC);
+                            context.SaveChanges();
+                            notifier.ShowSuccess("Movie marked as favorite!");
+                        }
+                    }
+                },
+                pre => SelectedMovie != null);
     }
 
     private void UpdateMovies(int num)

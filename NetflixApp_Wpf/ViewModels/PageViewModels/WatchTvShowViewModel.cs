@@ -2,9 +2,9 @@
 using NetflixApp_Wpf.DTOs;
 using NetflixApp_Wpf.Services;
 using NetflixApp_Wpf.Views.Pages;
+using NetflixAppDataAccessLayer.Contexts;
 using NetflixAppDataAccessLayer.Repositories.Concretes;
 using NetflixAppDomainLayer.Entities.Concretes;
-using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Input;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
+using ToastNotifications.Messages;
 using ToastNotifications.Position;
 
 namespace NetflixApp_Wpf.ViewModels.PageViewModels;
@@ -55,7 +56,7 @@ public class WatchTvShowViewModel : NotificationService
         set { _isfavorite = (bool)value!; OnPropertyChanged(); }
     }
 
-    public string? filePath = "../../../DTOs/CurrentPersonEmail.txt";
+    NetflixDbContext context = new();
     public WatchTvShowViewModel(WatchMovieView watchMovie, Person person, int index, int langId, int type)
     {
         WatchMovieVieww = watchMovie;
@@ -86,21 +87,47 @@ public class WatchTvShowViewModel : NotificationService
             Imdb_Link = SelectedMovie.Imdb_link;
         }
 
-        //var selectedPerson = db.loadedPeople.FirstOrDefault(person => person.Email == CurrentPerson?.Email);
-        //if (selectedPerson != null)
-        //{
-        //    if (selectedPerson.FavsList!.Any(u => u.title == SelectedMovie?.Name))
-        //        IsFavorite = true;
-        //    else
-        //        IsFavorite = false;
-        //}
+        var selectedPerson = context.People.FirstOrDefault(person => person.Email == CurrentPerson!.Email);
+        if (selectedPerson != null)
+        {
+            switch (GlobalStringCommand.Commaand)
+            {
+                case "Top250Movie":
+                    if (selectedPerson.AddListTMs!.FirstOrDefault(add => add.Id_TM == SelectedMovie!.Id && add.Id_Person == CurrentPerson.Id && add.IsFavorite == true) != null)
+                        IsFavorite = true;
+                    else
+                        IsFavorite = false;
+                    break;
+                case "Top250TvShow":
+                    if (selectedPerson.AddListTTs!.FirstOrDefault(add => add.Id_TT == SelectedMovie!.Id && add.Id_Person == CurrentPerson.Id && add.IsFavorite == true) != null)
+                        IsFavorite = true;
+                    else
+                        IsFavorite = false;
+                    break;
+                case "Popularmovies":
+                    if (selectedPerson.AddListMPMs!.FirstOrDefault(add => add.Id_MPM == SelectedMovie!.Id && add.Id_Person == CurrentPerson.Id && add.IsFavorite == true) != null)
+                        IsFavorite = true;
+                    else
+                        IsFavorite = false;
+                    break;
+                case "PopularTvShow":
+                    if (selectedPerson.AddListMpTs!.FirstOrDefault(add => add.Id_MpT == SelectedMovie!.Id && add.Id_Person == CurrentPerson.Id && add.IsFavorite == true) != null)
+                        IsFavorite = true;
+                    else
+                        IsFavorite = false;
+                    break;
+                default:
+                    return;
+            }
+        }
+        
 
         ExitCommand = new RelayCommand(
                action =>
                {
                    try
                    {
-                       File.WriteAllText(filePath, person.Email);
+                       File.WriteAllText(GlobalVariables.FilePath!, person.Email);
                        Application.Current.Shutdown();
                    }
                    catch (Exception ex)
@@ -158,64 +185,258 @@ public class WatchTvShowViewModel : NotificationService
                 },
                 pre => !string.IsNullOrEmpty(Video_Link));
 
-        //AddListCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            if (selectedPerson != null)
-        //            {
-        //                if (selectedPerson.AddList!.Any(u => u.title == selectedMovie?.title))
-        //                {
-        //                    notifier.ShowWarning("This movie already added to the list.");
-        //                }
-        //                else
-        //                {
-        //                     Determine the new rank based on the maximum rank in AddList or set to 1 if AddList is empty
-        //                    int lastRank = selectedPerson.AddList.Any() ? selectedPerson.AddList.Max(m => m.rank) : 0;
+        AddListCommand = new RelayCommand(
+                action =>
+                {
+                    if (selectedPerson != null)
+                    {
+                        switch (GlobalStringCommand.Commaand)
+                        {
+                            case "Top250Movie":
+                                if (selectedPerson.AddListTMs!.Any(u => (u.Id_TM == SelectedMovie!.Id && u.IsBoth == false && u.IsFavorite == false)
+                                    || (u.Id_TM == SelectedMovie!.Id && u.IsBoth == true)))
+                                {
+                                    notifier.ShowWarning("This movie is already added to the list.");
+                                }
+                                else
+                                {
+                                    var addListTM = new AddListTM
+                                    {
+                                        Id_Person = selectedPerson.Id,
+                                        Id_TM = SelectedMovie!.Id,
+                                    };
 
-        //                     Set the rank for the selectedMovie
-        //                    selectedMovie.rank = lastRank + 1;
+                                    context.AddListTMs.Add(addListTM);
+                                    context.SaveChanges();
+                                    notifier.ShowSuccess("Movie added to the list!");
+                                }
+                                break;
+                            case "Top250TvShow":
+                                if (selectedPerson.AddListTTs!.Any(u => (u.Id_TT == SelectedMovie!.Id && u.IsBoth == false && u.IsFavorite == false)
+                                    || (u.Id_TT == SelectedMovie!.Id && u.IsBoth == true)))
+                                {
+                                    notifier.ShowWarning("This movie is already added to the list.");
+                                }
+                                else
+                                {
+                                    var addListTT = new AddListTT
+                                    {
+                                        Id_Person = selectedPerson.Id,
+                                        Id_TT = SelectedMovie!.Id,
+                                    };
 
-        //                     Add selectedMovie to the AddList of the selectedPerson
-        //                    selectedPerson.AddList.Add(selectedMovie);
+                                    context.AddListTTs.Add(addListTT);
+                                    context.SaveChanges();
+                                    notifier.ShowSuccess("Movie added to the list!");
+                                }
+                                break;
+                            case "Popularmovies":
+                                if (selectedPerson.AddListMPMs!.Any(u => (u.Id_MPM == SelectedMovie!.Id && u.IsBoth == false && u.IsFavorite == false)
+                                    || (u.Id_MPM == SelectedMovie!.Id && u.IsBoth == true)))
+                                {
+                                    notifier.ShowWarning("This movie is already added to the list.");
+                                }
+                                else
+                                {
+                                    var addListMPM = new AddListMPM
+                                    {
+                                        Id_Person = selectedPerson.Id,
+                                        Id_MPM = SelectedMovie!.Id,
+                                    };
 
-        //                     Save the updated AddList for the selectedPerson
-        //                    db.SavePeopleToJson();
+                                    context.AddListMPMs.Add(addListMPM);
+                                    context.SaveChanges();
+                                    notifier.ShowSuccess("Movie added to the list!");
+                                }
+                                break;
+                            case "PopularTvShow":
+                                if (selectedPerson.AddListMpTs!.Any(u => (u.Id_MpT == SelectedMovie!.Id && u.IsBoth == false && u.IsFavorite == false)
+                                    || (u.Id_MpT == SelectedMovie!.Id && u.IsBoth == true)))
+                                {
+                                    notifier.ShowWarning("This movie is already added to the list.");
+                                }
+                                else
+                                {
+                                    var addListMpT = new AddListMpT
+                                    {
+                                        Id_Person = selectedPerson.Id,
+                                        Id_MpT = SelectedMovie!.Id,
+                                    };
 
-        //                    notifier.ShowSuccess("Movie added to the list!");
-        //                }
-        //            }
-        //        },
-        //        pre => selectedMovie != null);
+                                    context.AddListMpTs.Add(addListMpT);
+                                    context.SaveChanges();
+                                    notifier.ShowSuccess("Movie added to the list!");
+                                }
+                                break;
+                            default:
+                                return;
+                        }
+                    }
+                },
+                pre => SelectedMovie != null);
 
-        //HeartCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            if (selectedPerson != null)
-        //            {
-        //                if (IsFavorite == false)
-        //                {
-        //                    Movie? movieToRemove = selectedPerson!.FavsList!.FirstOrDefault(m => m.title == selectedMovie?.title);
-        //                    int removedRank = movieToRemove.rank;
-        //                    selectedPerson!.FavsList!.Remove(movieToRemove);
+        HeartCommand = new RelayCommand(
+                action =>
+                {
+                    switch (GlobalStringCommand.Commaand)
+                    {
+                        case "Top250Movie":
+                            if (selectedPerson != null)
+                            {
+                                var addListTM = selectedPerson.AddListTMs!.FirstOrDefault(add => add.Id_TM == SelectedMovie!.Id && add.Id_Person == CurrentPerson.Id);
 
-        //                    foreach (Movie movie in selectedPerson.FavsList.Where(m => m.rank > removedRank))
-        //                    {
-        //                        movie.rank--;
-        //                    }
-        //                    db.SavePeopleToJson();
-        //                    notifier.ShowSuccess("Movie removed from favorites!");
-        //                }
-        //                else
-        //                {
-        //                    int lastRank = selectedPerson.FavsList!.Any() ? selectedPerson.FavsList!.Max(m => m.rank) : 0;
-        //                    selectedMovie!.rank = lastRank + 1;
-        //                    selectedPerson.FavsList!.Add(selectedMovie);
-        //                    db.SavePeopleToJson();
-        //                    notifier.ShowSuccess("Movie added to favorites!");
-        //                }
-        //            }
-        //        },
-        //        pre => selectedMovie != null);
+                                if (addListTM != null)
+                                {
+                                    addListTM.IsFavorite = !addListTM.IsFavorite;
+                                    if (addListTM.IsFavorite)
+                                    {
+                                        notifier.ShowSuccess("Movie marked as favorite!");
+                                        addListTM.IsBoth = true;
+                                    }
+                                    else
+                                    {
+                                        if (addListTM.IsBoth == true)
+                                            addListTM.IsBoth = false;
+                                        else
+                                            context.AddListTMs.Remove(addListTM);
+                                        notifier.ShowSuccess("Movie removed from favorites!");
+                                    }
+                                    context.SaveChanges();
+                                }
+                                else
+                                {
+                                    addListTM = new AddListTM
+                                    {
+                                        Id_Person = selectedPerson.Id,
+                                        Id_TM = SelectedMovie!.Id,
+                                        IsFavorite = true
+                                    };
+
+                                    context.AddListTMs.Add(addListTM);
+                                    context.SaveChanges();
+                                    notifier.ShowSuccess("Movie marked as favorite!");
+                                }
+                            }
+                            break;
+                        case "Top250TvShow":
+                            if (selectedPerson != null)
+                            {
+                                var addListTT = selectedPerson.AddListTTs!.FirstOrDefault(add => add.Id_TT == SelectedMovie!.Id && add.Id_Person == CurrentPerson.Id);
+
+                                if (addListTT != null)
+                                {
+                                    addListTT.IsFavorite = !addListTT.IsFavorite;
+                                    if (addListTT.IsFavorite)
+                                    {
+                                        notifier.ShowSuccess("Movie marked as favorite!");
+                                        addListTT.IsBoth = true;
+                                    }
+                                    else
+                                    {
+                                        if (addListTT.IsBoth == true)
+                                            addListTT.IsBoth = false;
+                                        else
+                                            context.AddListTTs.Remove(addListTT);
+                                        notifier.ShowSuccess("Movie removed from favorites!");
+                                    }
+                                    context.SaveChanges();
+                                }
+                                else
+                                {
+                                    addListTT = new AddListTT
+                                    {
+                                        Id_Person = selectedPerson.Id,
+                                        Id_TT = SelectedMovie!.Id,
+                                        IsFavorite = true
+                                    };
+
+                                    context.AddListTTs.Add(addListTT);
+                                    context.SaveChanges();
+                                    notifier.ShowSuccess("Movie marked as favorite!");
+                                }
+                            }
+                            break;
+                        case "Popularmovies":
+                            if (selectedPerson != null)
+                            {
+                                var addListMPM = selectedPerson.AddListMPMs!.FirstOrDefault(add => add.Id_MPM == SelectedMovie!.Id && add.Id_Person == CurrentPerson.Id);
+
+                                if (addListMPM != null)
+                                {
+                                    addListMPM.IsFavorite = !addListMPM.IsFavorite;
+                                    if (addListMPM.IsFavorite)
+                                    {
+                                        notifier.ShowSuccess("Movie marked as favorite!");
+                                        addListMPM.IsBoth = true;
+                                    }
+                                    else
+                                    {
+                                        if (addListMPM.IsBoth == true)
+                                            addListMPM.IsBoth = false;
+                                        else
+                                            context.AddListMPMs.Remove(addListMPM);
+                                        notifier.ShowSuccess("Movie removed from favorites!");
+                                    }
+                                    context.SaveChanges();
+                                }
+                                else
+                                {
+                                    addListMPM = new AddListMPM
+                                    {
+                                        Id_Person = selectedPerson.Id,
+                                        Id_MPM = SelectedMovie!.Id,
+                                        IsFavorite = true
+                                    };
+
+                                    context.AddListMPMs.Add(addListMPM);
+                                    context.SaveChanges();
+                                    notifier.ShowSuccess("Movie marked as favorite!");
+                                }
+                            }
+                            break;
+                        case "PopularTvShow":
+                            if (selectedPerson != null)
+                            {
+                                var addListMpT = selectedPerson.AddListMpTs!.FirstOrDefault(add => add.Id_MpT == SelectedMovie!.Id && add.Id_Person == CurrentPerson.Id);
+
+                                if (addListMpT != null)
+                                {
+                                    addListMpT.IsFavorite = !addListMpT.IsFavorite;
+                                    if (addListMpT.IsFavorite)
+                                    {
+                                        notifier.ShowSuccess("Movie marked as favorite!");
+                                        addListMpT.IsBoth = true;
+                                    }
+                                    else
+                                    {
+                                        if (addListMpT.IsBoth == true)
+                                            addListMpT.IsBoth = false;
+                                        else
+                                            context.AddListMpTs.Remove(addListMpT);
+                                        notifier.ShowSuccess("Movie removed from favorites!");
+                                    }
+                                    context.SaveChanges();
+                                }
+                                else
+                                {
+                                    addListMpT = new AddListMpT
+                                    {
+                                        Id_Person = selectedPerson.Id,
+                                        Id_MpT = SelectedMovie!.Id,
+                                        IsFavorite = true
+                                    };
+
+                                    context.AddListMpTs.Add(addListMpT);
+                                    context.SaveChanges();
+                                    notifier.ShowSuccess("Movie marked as favorite!");
+                                }
+                            }
+                            break;
+                        default:
+                            return;
+                    }
+                },
+                pre => SelectedMovie != null);
     }
 
     private void UpdateTop250MovieFromDatabase(int num)
@@ -248,7 +469,7 @@ public class WatchTvShowViewModel : NotificationService
             .Where(ec => ec.Languages!.Any(l => l.Id == num))
             .Select(ec => new MovieTvShowDTO
             {
-                Id = ec.Id,
+                Id = ec.Id - 146,
                 Name = ec.Name,
                 Image = ec.Image_link,
                 Imdb_link = ec.Imdb_link,
@@ -292,7 +513,7 @@ public class WatchTvShowViewModel : NotificationService
             .Where(ec => ec.Languages!.Any(l => l.Id == num))
             .Select(ec => new MovieTvShowDTO
             {
-                Id = ec.Id,
+                Id = ec.Id - 1,
                 Name = ec.Name,
                 Image = ec.Image_link,
                 Imdb_link = ec.Imdb_link,

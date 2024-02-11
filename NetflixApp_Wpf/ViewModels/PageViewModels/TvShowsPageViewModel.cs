@@ -30,6 +30,8 @@ public class TvShowsPageViewModel : NotificationService
     public ICommand? ExitAppCommand { get; set; }
     public ICommand? ChangeCommand { get; set; }
     public ICommand? SearchCommand { get; set; }
+    public ICommand? GoListCommand { get; set; }
+    public ICommand? HeartCommand { get; set; }
 
     private string? _command;
 
@@ -68,7 +70,6 @@ public class TvShowsPageViewModel : NotificationService
         }
     }
 
-    public string? filePath = "../../../DTOs/CurrentPersonEmail.txt";
     public TvShowsPageViewModel(TvShowsPageView tvShows, Person? currentPerson, string? commandd)
     {
         tvShowsPageView = tvShows;
@@ -85,7 +86,7 @@ public class TvShowsPageViewModel : NotificationService
                {
                    try
                    {
-                       File.WriteAllText(filePath, currentPerson!.Email);
+                       File.WriteAllText(GlobalVariables.FilePath!, currentPerson!.Email);
                        Application.Current.Shutdown();
                    }
                    catch (Exception ex)
@@ -145,6 +146,22 @@ public class TvShowsPageViewModel : NotificationService
                             break;
                     }
                     CommandCheck();
+                },
+                pre => true);
+
+        GoListCommand = new RelayCommand(
+                action =>
+                {
+                    FilmListPageView filmList = new(currentPerson, "GoList", 2);
+                    tvShowsPageView.NavigationService.Navigate(filmList);
+                },
+                pre => true);
+
+        HeartCommand = new RelayCommand(
+                action =>
+                {
+                    FilmListPageView filmList = new(currentPerson, "Heart", 2);
+                    tvShowsPageView.NavigationService.Navigate(filmList);
                 },
                 pre => true);
     }

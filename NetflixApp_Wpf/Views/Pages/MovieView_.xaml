@@ -500,7 +500,7 @@
                                     Text="{Binding SelectedMovie.Name}"
                                     TextAlignment="Center"
                                     Width="260"
-                                    Height="120" Padding="0 5 0 0"
+                                    Height="120" Padding="0 4 20 0"
                                     Margin="50 5 0 10"
                                     TextWrapping="Wrap"
                                     Foreground="White"
@@ -509,7 +509,7 @@
                                     VerticalAlignment="Top"/>
 
                                 <StackPanel Orientation="Horizontal">
-                                    <Label x:Name="imdb" Content="IMDB" Foreground="White" FontWeight="Bold" Margin="60 2 0 5"/>
+                                    <Label x:Name="imdb" Content="IMDB" Foreground="White" FontWeight="Bold" Margin="55 2 0 5"/>
                                     <TextBlock                       
                                         FontSize="14"
                                         Text="{Binding SelectedMovie.Rating}"

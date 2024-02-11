@@ -11,6 +11,7 @@ internal class AddListMpTConfiguration : IEntityTypeConfiguration<AddListMpT>
         builder.HasKey(e => e.Id);
         builder.Property(e => e.Id).IsRequired().UseIdentityColumn();
         builder.Property(e => e.IsFavorite).IsRequired();
+        builder.Property(e => e.IsBoth).IsRequired();
 
         builder.HasOne(p => p.Person)
             .WithMany(a => a.AddListMpTs)
