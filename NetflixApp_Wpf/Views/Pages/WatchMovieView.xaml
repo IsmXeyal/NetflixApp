@@ -330,7 +330,7 @@
                         <TextBlock Text="{Binding SelectedMovie.Rating}" Foreground="White" TextWrapping="Wrap" TextAlignment="Left" Padding="20 2 0 0"
                             Background="DarkGoldenrod" FontWeight="Bold" FontSize="18" Width="74"/>
                     </Border>
-                    <materialDesign:PackIcon Kind="Star" Foreground="White" Margin="617 -31 0 0" Width="25" Height="20"/>
+                    <materialDesign:PackIcon Kind="Star" Foreground="White" Margin="613 -30 0 0" Width="25" Height="20"/>
 
                     <Grid Height="330" Width="666" Margin="20 20 20 40" Background="DarkGray">
                         <eo:WebControl Background="#FF191818">

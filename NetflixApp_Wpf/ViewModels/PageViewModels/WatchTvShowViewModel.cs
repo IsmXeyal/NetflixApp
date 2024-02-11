@@ -222,7 +222,7 @@ public class WatchTvShowViewModel : NotificationService
                                     var addListTT = new AddListTT
                                     {
                                         Id_Person = selectedPerson.Id,
-                                        Id_TT = SelectedMovie!.Id,
+                                        Id_TT = SelectedMovie!.Id + 146,
                                     };
 
                                     context.AddListTTs.Add(addListTT);
@@ -260,7 +260,7 @@ public class WatchTvShowViewModel : NotificationService
                                     var addListMpT = new AddListMpT
                                     {
                                         Id_Person = selectedPerson.Id,
-                                        Id_MpT = SelectedMovie!.Id,
+                                        Id_MpT = SelectedMovie!.Id + 1,
                                     };
 
                                     context.AddListMpTs.Add(addListMpT);
@@ -346,7 +346,7 @@ public class WatchTvShowViewModel : NotificationService
                                     addListTT = new AddListTT
                                     {
                                         Id_Person = selectedPerson.Id,
-                                        Id_TT = SelectedMovie!.Id,
+                                        Id_TT = SelectedMovie!.Id + 146,
                                         IsFavorite = true
                                     };
 
@@ -422,7 +422,7 @@ public class WatchTvShowViewModel : NotificationService
                                     addListMpT = new AddListMpT
                                     {
                                         Id_Person = selectedPerson.Id,
-                                        Id_MpT = SelectedMovie!.Id,
+                                        Id_MpT = SelectedMovie!.Id + 1,
                                         IsFavorite = true
                                     };
 
