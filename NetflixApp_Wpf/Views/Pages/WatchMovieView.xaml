@@ -355,7 +355,7 @@
                     </Border>
                     <materialDesign:PackIcon Kind="Star" Foreground="White" Margin="613 -30 0 0" Width="25" Height="20"/>
 
-                    <Grid Height="330" Width="666" Margin="20 20 20 40" Background="DarkGray">
+                    <Grid Height="330" Width="666" Margin="20" Background="DarkGray">
                         <eo:WebControl Background="#FF191818">
 
                             <eo:WebControl.WebView>
@@ -375,6 +375,23 @@
 
                     <TextBlock Text="{Binding SelectedMovie.Description}" TextWrapping="Wrap" TextAlignment="Center" FontSize="14" FontWeight="Bold"
                         Width="500"  Margin="0 5 0 0" Padding="5" Foreground="White" Background="#FF191818"/>
+
+                    <Label Content="Comments" Foreground="White" HorizontalAlignment="Left" Width="120" Background="Black"
+                        FontSize="17" FontWeight="SemiBold" BorderThickness="1" BorderBrush="AliceBlue" Padding="15 5 5 5" Margin="50 30 0 0"/>
+
+                    <ItemsControl ItemsSource="{Binding Comments}" BorderBrush="AntiqueWhite" BorderThickness="1" Width="600"
+                                  Margin="0 15 0 0" Background="Black" Padding="10 5 10 20">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Username}" TextWrapping="Wrap" TextAlignment="Justify" FontSize="12" FontWeight="SemiBold" 
+                                        Foreground="Gold"  HorizontalAlignment="Left" Background="Transparent" Margin="20 10 0 0"/>
+                                    <TextBlock Text="{Binding Description}" TextWrapping="Wrap" TextAlignment="Justify" FontSize="13" FontWeight="SemiBold" 
+                                        Foreground="White" HorizontalAlignment="Left" Background="Transparent" Margin="22 3 0 0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

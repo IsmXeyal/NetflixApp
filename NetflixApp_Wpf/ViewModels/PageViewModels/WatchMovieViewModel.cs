@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
@@ -30,6 +31,15 @@ public class WatchMovieViewModel : NotificationService
         get { return _movies; }
         set { _movies = value; OnPropertyChanged(); }
     }
+
+    private ObservableCollection<CommentDTO>? _comment;
+
+    public ObservableCollection<CommentDTO>? Comments
+    {
+        get { return _comment; }
+        set { _comment = value; OnPropertyChanged(); }
+    }
+
     public ICommand? PlayCommand { get; set; }
     public ICommand? TrailerCommand { get; set; }
     public ICommand? BackCommand { get; set; }
@@ -73,6 +83,7 @@ public class WatchMovieViewModel : NotificationService
             Imdb_Link = SelectedMovie.Imdb_link;
         }
 
+        UpdateComments();
         var selectedPerson = context.People.FirstOrDefault(person => person.Email == CurrentPerson!.Email);
         if (selectedPerson != null)
         {
@@ -196,32 +207,43 @@ public class WatchMovieViewModel : NotificationService
                 },
                 pre => SelectedMovie != null);
 
-        //SendCommand = new RelayCommand(
-        //        action =>
-        //        {
-        //            CommentDTO newCommentDto = new()
-        //            {
-        //                Username = CurrentPerson.Username,
-        //                CreatedDate = DateTime.Now,
-        //                Description = WatchMovieVieww.tbComment.Text
-        //            };
+        SendCommand = new RelayCommand(
+                action =>
+                {
+                    if (!string.IsNullOrWhiteSpace(WatchMovieVieww!.tbComment.Text))
+                    {
+                        var newComment = new CommentEc
+                        {
+                            Id_EditorChoice = SelectedMovie!.Rank,
+                            UserName = CurrentPerson!.Username,
+                            Description = WatchMovieVieww!.tbComment.Text
+                        };
 
-        //            try
-        //            {
-        //                CommentRepository commentRepo = new();
-        //                Comment newComment = ConvertToComment(newCommentDto);
-        //                commentRepo.Add(newComment);
-
-        //                commentRepo.SaveChanges();
-        //                WatchMovieVieww.tbComment.Clear();
-        //                notifier.ShowSuccess("Comment is added successfully!!");
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                notifier.ShowError("Error adding comment to database: " + ex.Message);
-        //            }
-        //        },
-        //        pre => SelectedMovie != null && CurrentPerson != null);
+                        try
+                        {
+                            context.CommentEcs.Add(newComment);
+                            context.SaveChanges();
+                            WatchMovieVieww!.tbComment.Clear();
+                            notifier.ShowSuccess("Comment is sent successfully!!");
+                            DispatcherTimer timer = new();
+                            timer.Interval = TimeSpan.FromSeconds(2);
+                            timer.Tick += (sender, e) =>
+                            {
+                                timer.Stop();
+                                var watchAgain = new WatchMovieView(CurrentPerson!, SelectedMovie.Rank, 1, 1);
+                                WatchMovieVieww?.NavigationService?.Navigate(watchAgain);
+                            };
+                            timer.Start();
+                        }
+                        catch (Exception ex)
+                        {
+                            notifier.ShowError("Error adding comment to database: " + ex.Message);
+                        }
+                    }
+                    else
+                        notifier.ShowWarning("Please enter a comment before sending.");
+                },
+                pre => SelectedMovie != null && CurrentPerson != null);
 
     }
 
@@ -247,15 +269,21 @@ public class WatchMovieViewModel : NotificationService
         Moviess = new ObservableCollection<EditorChoiceDTO>(dtoList);
     }
 
-    //private Comment ConvertToComment(CommentDTO commentDto)
-    //{
-    //    return new Comment
-    //    {
-    //        UserName = commentDto.Username,
-    //        CreatedDate = commentDto.CreatedDate,
-    //        Description = commentDto.Description
-    //    };
-    //}
+    private void UpdateComments()
+    {
+        CommentEcRepository comEc = new();
+        ICollection<CommentEc> selection = comEc!.GetAllWithEditorChoices()!;
+        IEnumerable<CommentDTO> dtoList = selection
+            .Where(ec => ec.Id_EditorChoice == SelectedMovie?.Rank)
+            .Select(ec => new CommentDTO
+            {
+                Username = ec.UserName,
+                CreatedDate = ec.CreatedDate,
+                Description = ec.Description
+            });
+        
+        Comments = new ObservableCollection<CommentDTO>(dtoList);
+    }
 
     Notifier notifier = new(cfg =>
     {

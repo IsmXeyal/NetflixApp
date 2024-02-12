@@ -6,10 +6,12 @@ using NetflixAppDataAccessLayer.Contexts;
 using NetflixAppDataAccessLayer.Repositories.Concretes;
 using NetflixAppDomainLayer.Entities.Concretes;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using ToastNotifications;
 using ToastNotifications.Lifetime;
 using ToastNotifications.Messages;
@@ -35,6 +37,7 @@ public class WatchTvShowViewModel : NotificationService
     public ICommand? BackCommand { get; set; }
     public ICommand? ExitCommand { get; set; }
     public ICommand? AddListCommand { get; set; }
+    public ICommand? SendCommand { get; set; }
     public ICommand? HeartCommand { get; set; }
 
     public string? Video_Link { get; set; }
@@ -48,6 +51,14 @@ public class WatchTvShowViewModel : NotificationService
         set { _selectedMovie = value; OnPropertyChanged(); }
     }
 
+    private ObservableCollection<CommentDTO>? _comment;
+
+    public ObservableCollection<CommentDTO>? Comments
+    {
+        get { return _comment; }
+        set { _comment = value; OnPropertyChanged(); }
+    }
+
     private bool _isfavorite;
 
     public bool? IsFavorite
@@ -57,6 +68,7 @@ public class WatchTvShowViewModel : NotificationService
     }
 
     NetflixDbContext context = new();
+    DispatcherTimer timer = new();
     public WatchTvShowViewModel(WatchMovieView watchMovie, Person person, int index, int langId, int type)
     {
         WatchMovieVieww = watchMovie;
@@ -85,6 +97,24 @@ public class WatchTvShowViewModel : NotificationService
         {
             SelectedMovie = Moviess[Index - 1];
             Imdb_Link = SelectedMovie.Imdb_link;
+        }
+
+        switch (GlobalStringCommand.Commaand)
+        {
+            case "Top250Movie":
+                UpdateCommentsTM();
+                break;
+            case "Top250TvShow":
+                UpdateCommentsTT();
+                break;
+            case "Popularmovies":
+                UpdateCommentsMPM();
+                break;
+            case "PopularTvShow":
+                UpdateCommentsMPT();
+                break;
+            default:
+                return;
         }
 
         var selectedPerson = context.People.FirstOrDefault(person => person.Email == CurrentPerson!.Email);
@@ -437,6 +467,145 @@ public class WatchTvShowViewModel : NotificationService
                     }
                 },
                 pre => SelectedMovie != null);
+
+        SendCommand = new RelayCommand(
+                action =>
+                {
+                    switch (GlobalStringCommand.Commaand)
+                    {
+                        case "Top250Movie":
+                            if (!string.IsNullOrWhiteSpace(WatchMovieVieww!.tbComment.Text))
+                            {
+                                var newComment = new CommentTM
+                                {
+                                    Id_Top250Movie = SelectedMovie!.Id,
+                                    UserName = CurrentPerson!.Username,
+                                    Description = WatchMovieVieww!.tbComment.Text
+                                };
+                                try
+                                {
+                                    context.CommentTMs.Add(newComment);
+                                    context.SaveChanges();
+                                    WatchMovieVieww!.tbComment.Clear();
+                                    notifier.ShowSuccess("Comment is sent successfully!!");
+                                    timer.Interval = TimeSpan.FromSeconds(2);
+                                    timer.Tick += (sender, e) =>
+                                    {
+                                        timer.Stop();
+                                        var watchAgain = new WatchMovieView(CurrentPerson!, SelectedMovie.Id, 1, 2);
+                                        WatchMovieVieww?.NavigationService?.Navigate(watchAgain);
+                                    };
+                                    timer.Start();
+                                }
+                                catch (Exception ex)
+                                {
+                                    notifier.ShowError("Error adding comment to database: " + ex.Message);
+                                }
+                            }
+                            else
+                                notifier.ShowWarning("Please enter a comment before sending.");
+                            break;
+                        case "Top250TvShow":
+                            if (!string.IsNullOrWhiteSpace(WatchMovieVieww!.tbComment.Text))
+                            {
+                                var newComment2 = new CommentTT
+                                {
+                                    Id_Top250TvShow = SelectedMovie!.Id + 146,
+                                    UserName = CurrentPerson!.Username,
+                                    Description = WatchMovieVieww!.tbComment.Text
+                                };
+                                try
+                                {
+                                    context.CommentTTs.Add(newComment2);
+                                    context.SaveChanges();
+                                    WatchMovieVieww!.tbComment.Clear();
+                                    notifier.ShowSuccess("Comment is sent successfully!!");
+                                    timer.Interval = TimeSpan.FromSeconds(2);
+                                    timer.Tick += (sender, e) =>
+                                    {
+                                        timer.Stop();
+                                        var watchAgain = new WatchMovieView(CurrentPerson!, SelectedMovie.Id, 1, 2);
+                                        WatchMovieVieww?.NavigationService?.Navigate(watchAgain);
+                                    };
+                                    timer.Start();
+                                }
+                                catch (Exception ex)
+                                {
+                                    notifier.ShowError("Error adding comment to database: " + ex.Message);
+                                }
+                            }
+                            else
+                                notifier.ShowWarning("Please enter a comment before sending.");
+                            break;
+                        case "Popularmovies":
+                            if (!string.IsNullOrWhiteSpace(WatchMovieVieww!.tbComment.Text))
+                            {
+                                var newComment3 = new CommentMPM
+                                {
+                                    Id_MostPopularMovie = SelectedMovie!.Id,
+                                    UserName = CurrentPerson!.Username,
+                                    Description = WatchMovieVieww!.tbComment.Text
+                                };
+                                try
+                                {
+                                    context.CommentMPMs.Add(newComment3);
+                                    context.SaveChanges();
+                                    WatchMovieVieww!.tbComment.Clear();
+                                    notifier.ShowSuccess("Comment is sent successfully!!");
+                                    timer.Interval = TimeSpan.FromSeconds(2);
+                                    timer.Tick += (sender, e) =>
+                                    {
+                                        timer.Stop();
+                                        var watchAgain = new WatchMovieView(CurrentPerson!, SelectedMovie.Id, 1, 2);
+                                        WatchMovieVieww?.NavigationService?.Navigate(watchAgain);
+                                    };
+                                    timer.Start();
+                                }
+                                catch (Exception ex)
+                                {
+                                    notifier.ShowError("Error adding comment to database: " + ex.Message);
+                                }
+                            }
+                            else
+                                notifier.ShowWarning("Please enter a comment before sending.");
+                            break;
+                        case "PopularTvShow":
+                            if (!string.IsNullOrWhiteSpace(WatchMovieVieww!.tbComment.Text))
+                            {
+                                var newComment4 = new CommentMPT
+                                {
+                                    Id_MostPopularTvShow = SelectedMovie!.Id + 1,
+                                    UserName = CurrentPerson!.Username,
+                                    Description = WatchMovieVieww!.tbComment.Text
+                                };
+                                try
+                                {
+                                    context.CommentMPTs.Add(newComment4);
+                                    context.SaveChanges();
+                                    WatchMovieVieww!.tbComment.Clear();
+                                    notifier.ShowSuccess("Comment is sent successfully!!");
+                                    timer.Interval = TimeSpan.FromSeconds(2);
+                                    timer.Tick += (sender, e) =>
+                                    {
+                                        timer.Stop();
+                                        var watchAgain = new WatchMovieView(CurrentPerson!, SelectedMovie.Id, 1, 2);
+                                        WatchMovieVieww?.NavigationService?.Navigate(watchAgain);
+                                    };
+                                    timer.Start();
+                                }
+                                catch (Exception ex)
+                                {
+                                    notifier.ShowError("Error adding comment to database: " + ex.Message);
+                                }
+                            }
+                            else
+                                notifier.ShowWarning("Please enter a comment before sending.");
+                            break;
+                        default:
+                            return;
+                    }
+                },
+                pre => SelectedMovie != null && CurrentPerson != null);
     }
 
     private void UpdateTop250MovieFromDatabase(int num)
@@ -525,6 +694,70 @@ public class WatchTvShowViewModel : NotificationService
             });
 
         Moviess = new ObservableCollection<MovieTvShowDTO>(dtoList);
+    }
+
+    private void UpdateCommentsMPT()
+    {
+        CommentMPTRepository comMPT = new();
+        ICollection<CommentMPT> selection = comMPT.GetAllWithMostPopularTvShows()!;
+        IEnumerable<CommentDTO> dtoList = selection
+            .Where(ec => ec.Id_MostPopularTvShow == SelectedMovie?.Id + 1)
+            .Select(ec => new CommentDTO
+            {
+                Username = ec.UserName,
+                CreatedDate = ec.CreatedDate,
+                Description = ec.Description
+            });
+
+        Comments = new ObservableCollection<CommentDTO>(dtoList);
+    }
+
+    private void UpdateCommentsTM()
+    {
+        CommentTMRepository comTM = new();
+        ICollection<CommentTM> selection = comTM.GetAllWithTop250Movies()!;
+        IEnumerable<CommentDTO> dtoList = selection
+            .Where(ec => ec.Id_Top250Movie == SelectedMovie?.Id)
+            .Select(ec => new CommentDTO
+            {
+                Username = ec.UserName,
+                CreatedDate = ec.CreatedDate,
+                Description = ec.Description
+            });
+
+        Comments = new ObservableCollection<CommentDTO>(dtoList);
+    }
+
+    private void UpdateCommentsTT()
+    {
+        CommentTTRepository comTT = new();
+        ICollection<CommentTT> selection = comTT.GetAllWithTop250TvShows()!;
+        IEnumerable<CommentDTO> dtoList = selection
+            .Where(ec => ec.Id_Top250TvShow == SelectedMovie?.Id + 146)
+            .Select(ec => new CommentDTO
+            {
+                Username = ec.UserName,
+                CreatedDate = ec.CreatedDate,
+                Description = ec.Description
+            });
+
+        Comments = new ObservableCollection<CommentDTO>(dtoList);
+    }
+
+    private void UpdateCommentsMPM()
+    {
+        CommentMPMRepository comMPM = new();
+        ICollection<CommentMPM> selection = comMPM.GetAllWithMostPopularMovies()!;
+        IEnumerable<CommentDTO> dtoList = selection
+            .Where(ec => ec.Id_MostPopularMovie == SelectedMovie?.Id)
+            .Select(ec => new CommentDTO
+            {
+                Username = ec.UserName,
+                CreatedDate = ec.CreatedDate,
+                Description = ec.Description
+            });
+
+        Comments = new ObservableCollection<CommentDTO>(dtoList);
     }
 
     Notifier notifier = new(cfg =>
