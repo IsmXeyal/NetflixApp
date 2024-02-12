@@ -319,6 +319,29 @@
                     </ToggleButton.Triggers>
                 </ToggleButton>
 
+                <Border Width="350" Height="40" HorizontalAlignment="Left" Margin="40 30 0 0"
+                    BorderBrush="Black" BorderThickness="2" CornerRadius="10" Background="#FF2D2B2B">
+                    <TextBox x:Name="tbComment" Width="340" Height="35" 
+                        Padding="5 0 40 2" TextWrapping="Wrap"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontSize="14"
+                        materialDesign:TextFieldAssist.UnderlineBrush="White"
+                        materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                        materialDesign:TextFieldAssist.TextFieldCornerRadius="12"
+                        CaretBrush="White">
+                        <materialDesign:HintAssist.Hint>
+                            <TextBlock x:Name="myComment" Text="Add your comment . . ." Margin="5 -4 0 0" VerticalAlignment="Center" Foreground="White"/>
+                        </materialDesign:HintAssist.Hint>
+                    </TextBox>
+                </Border>
+                <Button Background="Transparent" BorderThickness="0" Height="30"
+                    Width="40" 
+                    Margin="270 -40 0 0"
+                    Command="{Binding SendCommand}">
+                    <materialDesign:PackIcon Kind="Send" Height="20" Width="25" Margin="-12 0 0 0" Foreground="White"/>
+                </Button>
             </StackPanel>
 
             <ScrollViewer Width="700" HorizontalAlignment="Right">

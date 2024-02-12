@@ -13,7 +13,7 @@ public class EditorChoiceRepository : GenericRepository<EditorChoice>, IEditorCh
 
     public ICollection<EditorChoice>? GetAllWithComments()
     {
-        return _context?.EditorChoices.Include(x => x.Comments).ToList();
+        return _context?.EditorChoices.Include(x => x.CommentEcs).ToList();
     }
 
     public ICollection<EditorChoice>? GetAllWithGenres()

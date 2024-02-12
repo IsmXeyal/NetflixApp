@@ -36,6 +36,7 @@ public class WatchMovieViewModel : NotificationService
     public ICommand? ExitCommand { get; set; }
     public ICommand? AddListCommand { get; set; }
     public ICommand? HeartCommand { get; set; }
+    public ICommand? SendCommand { get; set; }
 
     public string? Video_Link { get; set; }
     public string? Imdb_Link { get; set; }
@@ -194,6 +195,34 @@ public class WatchMovieViewModel : NotificationService
                     }
                 },
                 pre => SelectedMovie != null);
+
+        //SendCommand = new RelayCommand(
+        //        action =>
+        //        {
+        //            CommentDTO newCommentDto = new()
+        //            {
+        //                Username = CurrentPerson.Username,
+        //                CreatedDate = DateTime.Now,
+        //                Description = WatchMovieVieww.tbComment.Text
+        //            };
+
+        //            try
+        //            {
+        //                CommentRepository commentRepo = new();
+        //                Comment newComment = ConvertToComment(newCommentDto);
+        //                commentRepo.Add(newComment);
+
+        //                commentRepo.SaveChanges();
+        //                WatchMovieVieww.tbComment.Clear();
+        //                notifier.ShowSuccess("Comment is added successfully!!");
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                notifier.ShowError("Error adding comment to database: " + ex.Message);
+        //            }
+        //        },
+        //        pre => SelectedMovie != null && CurrentPerson != null);
+
     }
 
     private void UpdateMovies(int num)
@@ -217,6 +246,16 @@ public class WatchMovieViewModel : NotificationService
 
         Moviess = new ObservableCollection<EditorChoiceDTO>(dtoList);
     }
+
+    //private Comment ConvertToComment(CommentDTO commentDto)
+    //{
+    //    return new Comment
+    //    {
+    //        UserName = commentDto.Username,
+    //        CreatedDate = commentDto.CreatedDate,
+    //        Description = commentDto.Description
+    //    };
+    //}
 
     Notifier notifier = new(cfg =>
     {

@@ -262,7 +262,7 @@ public class PersonInfoPageViewModel : NotificationService
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"Exception: {ex.Message}");
+                        notifier.ShowError($"Exception: {ex.Message}");
                     }
                 },
                 pre => true);

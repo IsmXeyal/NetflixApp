@@ -91,7 +91,7 @@ public class TvShowsPageViewModel : NotificationService
                    }
                    catch (Exception ex)
                    {
-                       MessageBox.Show($"Error writing to file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                       notifier.ShowError($"Error writing to file: {ex.Message}");
                    }
                },
                pre => true

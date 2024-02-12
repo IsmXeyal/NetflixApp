@@ -13,7 +13,7 @@ public class Top250TvShowRepository : GenericRepository<Top250TvShow>, ITop250Tv
 
     public ICollection<Top250TvShow>? GetAllWithComments()
     {
-        return _context?.Top250TvShows.Include(x => x.Comments).ToList();
+        return _context?.Top250TvShows.Include(x => x.CommentTTs).ToList();
     }
 
     public ICollection<Top250TvShow>? GetAllWithGenres()

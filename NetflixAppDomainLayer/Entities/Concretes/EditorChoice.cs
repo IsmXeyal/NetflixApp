@@ -12,5 +12,5 @@ public class EditorChoice : BaseMovieEntity
     public virtual ICollection<Genre>? Genres { get; set; }
     public virtual ICollection<AddListEC>? AddListECs { get; set; }
     public virtual ICollection<Language>? Languages { get; set; }
-    public virtual ICollection<Comment>? Comments { get; set; }
+    public virtual ICollection<CommentEc>? CommentEcs { get; set; }
 }

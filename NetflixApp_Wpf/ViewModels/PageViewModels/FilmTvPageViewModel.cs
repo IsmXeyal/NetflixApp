@@ -9,6 +9,10 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using ToastNotifications;
+using ToastNotifications.Lifetime;
+using ToastNotifications.Messages;
+using ToastNotifications.Position;
 
 namespace NetflixApp_Wpf.ViewModels.PageViewModels;
 
@@ -53,7 +57,7 @@ public class FilmTvPageViewModel : NotificationService
                    }
                    catch (Exception ex)
                    {
-                       MessageBox.Show($"Error writing to file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                       notifier.ShowError($"Error writing to file: {ex.Message}");
                    }
                },
                pre => true);
@@ -262,4 +266,19 @@ public class FilmTvPageViewModel : NotificationService
             }
         }
     }
+
+    Notifier notifier = new(cfg =>
+    {
+        cfg.PositionProvider = new WindowPositionProvider(
+            parentWindow: Application.Current.MainWindow,
+            corner: Corner.TopRight,
+            offsetX: 5,
+            offsetY: 30);
+
+        cfg.LifetimeSupervisor = new TimeAndCountBasedLifetimeSupervisor(
+            notificationLifetime: TimeSpan.FromSeconds(2),
+            maximumNotificationCount: MaximumNotificationCount.FromCount(2));
+
+        cfg.Dispatcher = Application.Current.Dispatcher;
+    });
 }

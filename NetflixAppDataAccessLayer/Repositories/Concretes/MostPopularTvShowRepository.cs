@@ -13,7 +13,7 @@ public class MostPopularTvShowRepository : GenericRepository<MostPopularTvShow>,
 
     public ICollection<MostPopularTvShow>? GetAllWithComments()
     {
-        return _context?.MostPopularTvShows.Include(x => x.Comments).ToList();
+        return _context?.MostPopularTvShows.Include(x => x.CommentMPTs).ToList();
     }
 
     public ICollection<MostPopularTvShow>? GetAllWithGenres()

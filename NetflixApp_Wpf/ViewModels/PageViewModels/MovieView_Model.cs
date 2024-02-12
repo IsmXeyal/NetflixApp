@@ -381,7 +381,7 @@ public class MovieView_Model : NotificationService
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error clearing user data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            notifier.ShowError($"Error clearing user data: {ex.Message}");
         }
     }
 

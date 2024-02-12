@@ -13,7 +13,7 @@ public class Top250MovieRepository : GenericRepository<Top250Movie>, ITop250Movi
 
     public ICollection<Top250Movie>? GetAllWithComments()
     {
-        return _context?.Top250Movies.Include(x => x.Comments).ToList();
+        return _context?.Top250Movies.Include(x => x.CommentTMs).ToList();
     }
 
     public ICollection<Top250Movie>? GetAllWithGenres()

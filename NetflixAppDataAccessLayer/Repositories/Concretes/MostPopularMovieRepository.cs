@@ -13,7 +13,7 @@ public class MostPopularMovieRepository : GenericRepository<MostPopularMovie>, I
 
     public ICollection<MostPopularMovie>? GetAllWithComments()
     {
-        return _context?.MostPopularMovies.Include(x => x.Comments).ToList();
+        return _context?.MostPopularMovies.Include(x => x.CommentMPMs).ToList();
     }
 
     public ICollection<MostPopularMovie>? GetAllWithGenres()
